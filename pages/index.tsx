@@ -14,7 +14,7 @@ const Home: NextPage = () => {
       <Header />
       <main className="flex flex-col items-center">        
         <h1 className="text-white">
-          {'<<< ZORA >>>'}
+          {'Belong to Release Club'}
         </h1>
       </main>
     </div>
