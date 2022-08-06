@@ -22,3 +22,6 @@ You now have a version of the starter kit running locally :))
 
 . . . create what is missing . . .
 
+. . . everything is lost . . .
+
+

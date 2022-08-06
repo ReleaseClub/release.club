@@ -40,9 +40,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <RainbowKitProvider
         chains={chains} 
         theme={darkTheme({
-          borderRadius: "none",
-          accentColor: "black",
-          accentColorForeground: "white"
+          borderRadius: 'none',
+          accentColor: "#FFB5A7",
+          accentColorForeground: "black"
       })}>
         <Component {...pageProps} />
       </RainbowKitProvider>

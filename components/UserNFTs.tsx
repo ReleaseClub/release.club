@@ -71,7 +71,7 @@ const UserNFTs = ({ userAddress, nfts, collectionInfo, setCollectionCB }) => {
                         placeholder="Input NFT Address"
                         name="inputContract"
                         type="text"
-                        value={collectionLookup} // zorbs
+                        value={collectionLookup}
                         onChange={(e) => {
                             e.preventDefault();
                             setCollectionLookup(e.target.value)
