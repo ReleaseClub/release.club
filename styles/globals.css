@@ -2,20 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  background-color: black;
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
+@layer base {
+  @font-face {
+    font-family: 'Satoshi-Regular';
+    src: url(/styles/fonts/Satoshi-Regular.ttf)
+      format('ttf');
+  }
+  @font-face {
+    font-family: 'Satoshi-Medium';
+    src: url(/styles/fonts/Satoshi-Medium.ttf)
+      format('ttf');
+  }
+  @font-face {
+    font-family: 'Budke';
+    src: url(/styles/fonts/BBBAufgangOstGX.ttf)
+      format('ttf');
+  }
+  body {
+    @apply bg-main-black;
+  }
 }
