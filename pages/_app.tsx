@@ -1,5 +1,5 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   darkTheme,
@@ -19,35 +19,36 @@ const { chains, provider } = configureChains(
   [chain.mainnet, chain.rinkeby],
   [
     // alchemyProvider({ alchemyId: process.env.NEXT_PUBLIC_ALCHMEY_ID }),
-    publicProvider()
+    publicProvider(),
   ]
 );
 
 const { connectors } = getDefaultWallets({
   appName: 'My RainbowKit App',
-  chains
+  chains,
 });
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
-  provider
-})
+  provider,
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
-        chains={chains} 
+        chains={chains}
         theme={darkTheme({
-          borderRadius: "none",
-          accentColor: "black",
-          accentColorForeground: "white"
-      })}>
+          borderRadius: 'none',
+          accentColor: '#FFB5A7',
+          accentColorForeground: 'black',
+        })}
+      >
         <Component {...pageProps} />
       </RainbowKitProvider>
-    </WagmiConfig>        
-  )
+    </WagmiConfig>
+  );
 }
 
-export default MyApp
+export default MyApp;
