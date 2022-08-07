@@ -76,7 +76,6 @@ const Populate: NextPage = () => {
           <a
             className='text-cta'
             href='http://create.zora.co/create/edition'
-            target="_blank"
           >
             create.zora.co
           </a>
