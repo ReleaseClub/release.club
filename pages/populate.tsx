@@ -1,6 +1,8 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { Header } from '../components/Header';
-import { useContractWrite, useContractRead, useContractEvent } from 'wagmi';
+import { ClubAddress } from '../components/ClubAddress';
+import { useContractWrite, useContractEvent } from 'wagmi';
 import { useState } from 'react';
 
 import ReleaseClub from '../abi/ReleaseClub.json';
@@ -10,41 +12,37 @@ const Populate: NextPage = () => {
   interface addNFT {
     contractAddress: string;
   }
+
   const [inputNFT, setInputNFT] = useState<addNFT>({
     contractAddress:
       'i.e. 0x63d46079d920e5dd1f0a38190764a...',
   });
+
   const { data, isError, isLoading, write } =
     useContractWrite({
+      // address below should be that of the newly created club contract
       addressOrName:
-        '0x47227af59cDb02C41501966a8ed92f47D1FD2858',
+        '0x68482945ab747e97d2EbDD9EfB9bB9e7C3B87F0D',
       contractInterface: ReleaseClub,
       functionName: 'addRelease',
-      // takes two arguments, newReleases as a tuple, and length as a uint256
-      args: [inputNFT.contractAddress, 1],
+      args: [
+        {
+          tokenContract: inputNFT.contractAddress,
+          tokenID: 1,
+        },
+      ],
       overrides: {
         gasLimit: 1000000,
       },
-      // onError(error, variables, context) {
-      //     console.log("error", error)
-      // },
-      // onSuccess(cancelData, variables, context) {
-      //     console.log("Success!", cancelData)
     });
-
-    // useContractEvent({
-    //   addressOrName: '0x47227af59cDb02C41501966a8ed92f47D1FD2858',
-    //   contractInterface: ClubFactory,
-    //   eventName: 'ClubCreated',
-    //   listener: (event) => console.log(event),
-    // })
 
   return (
     <div className='max-w-7xl mx-auto'>
       <Header />
       <div className='flex flex-wrap max-w-sm mx-auto'>
         <h1 className='text-4xl text-main-gray font-tr mt-32 my-8 w-full text-center'>
-          Add NFTs to {}
+          Add NFTs to{' '}
+          <div className='max-w-sm mx-auto'></div>
         </h1>
         <div className='w-full mt-16'>
           <label className='my-1 text-main-gray text-base'>
@@ -71,8 +69,8 @@ const Populate: NextPage = () => {
           />
         </div>
         <p className='text-main-gray-dark text-sm mt-12'>
-          Haven&apos;t minted an NFT using Zora&apos;s Editions
-          contracts? Mint your first one at{' '}
+          Haven&apos;t minted an NFT using Zora&apos;s
+          Editions contracts? Mint your first one at{' '}
           <a
             className='text-cta'
             href='http://create.zora.co/create/edition'
@@ -81,12 +79,20 @@ const Populate: NextPage = () => {
           </a>
         </p>
 
-        <button
-          className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray'
-          onClick={() => write()}
-        >
-          Add NFT
-        </button>
+        <div className='flex w-full flex-wrap justify-end'>
+          <button
+            className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray w-full'
+            onClick={() => write()}
+          >
+            Add NFT
+          </button>
+          {/* fix the below link */}
+          <Link href='/[clubAddress]'>
+            <button className='mt-12 text-main-gray-dark text-base hover:text-main-gray'>
+              Continue
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );

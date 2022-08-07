@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { Header } from '../components/Header';
 import {
   useContractWrite,
@@ -24,27 +25,21 @@ const Create: NextPage = () => {
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
-        '0x5f6C9Cc6AF7D20A5fc1d6701A1B3B3022F3745f4',
+        '0x0d07B6b3089E86d9F4DC899526F224788a469Ddd',
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
       onError(error) {
         console.log('error', error);
       },
-      // onSuccess(cancelData, variables, context) {
-      //   console.log('Success!', cancelData);
-      // },
     });
 
   useContractEvent({
     addressOrName:
-      '0x5f6C9Cc6AF7D20A5fc1d6701A1B3B3022F3745f4',
+      '0x0d07B6b3089E86d9F4DC899526F224788a469Ddd',
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
-    // listener: (event) => (
-    //   setClubName(event[1]), console.log(clubName)
-    // ),
-    listener: (event) => console.log(event[1]),
+    listener: (event) => console.log(event),
   });
 
   return (
@@ -77,38 +72,17 @@ const Create: NextPage = () => {
             }}
           />
         </div>
-
-        {/* <div className='w-full font-satoshi-med mt-16'>
-          <label className='my-1 text-main-gray text-base'>
-            Add curators
-          </label>
-          <p className='text-main-gray-dark text-sm'>
-            Add wallet addresses for each collaborator in
-            this club. You will also be able to do this
-            later.
-          </p>
-          <input
-            type='text'
-            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
-            value={club.curators}
-            onChange={(e) => {
-              e.preventDefault();
-              setClub((current) => {
-                return {
-                  ...current,
-                  curators: [e.target.value],
-                };
-              });
-            }}
-          />
-        </div> */}
-
-        <button
-          className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray'
-          onClick={() => write()}
-        >
-          Create club
-        </button>
+        <div className='flex w-full flex-wrap justify-end'>
+          <button
+            className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray w-full'
+            onClick={() => write()}
+          >
+            Create club
+          </button>
+          <Link href='/populate'>
+            <button className='mt-12 text-main-gray-dark text-base hover:text-main-gray'>Continue</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

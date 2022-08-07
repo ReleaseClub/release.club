@@ -21,14 +21,14 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "contractAddress",
+        "name": "tokenContract",
         "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
       }
     ],
     "name": "NewRelease",
@@ -197,9 +197,9 @@
             "type": "address"
           },
           {
-            "internalType": "address",
-            "name": "token",
-            "type": "address"
+            "internalType": "uint256",
+            "name": "tokenID",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Release[]",
@@ -345,9 +345,9 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "tokenID",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -459,9 +459,9 @@
             "type": "address"
           },
           {
-            "internalType": "address",
-            "name": "token",
-            "type": "address"
+            "internalType": "uint256",
+            "name": "tokenID",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Release[]",
