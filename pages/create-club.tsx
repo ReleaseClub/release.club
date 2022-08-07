@@ -25,8 +25,35 @@ const CreateClub: NextPage = () => {
   return (
     <div className='max-w-7xl mx-auto'>
       <Header />
-      <div className='text-3xl text-main-grey'>
-        <button onClick={() => write()}>Add Member</button>
+      <div className='flex flex-wrap max-w-sm mx-auto'>
+        <h1 className='text-4xl text-main-gray font-aufgang mt-32 my-8 w-full text-center'>
+          Create a new club
+        </h1>
+        <div className='w-full font-satoshi-med'>
+          <label className='my-2 text-main-gray text-base'>
+            Name*
+          </label>
+          <input type='text' className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0'/>
+        </div>
+
+        <div className='w-full font-satoshi-med mt-16'>
+          <label className='my-1 text-main-gray text-base'>
+            Add curators
+          </label>
+          <p className='text-main-gray-dark text-sm'>
+            Add wallet addresses for each collaborator in
+            this club. You will also be able to do this
+            later.
+          </p>
+          <input type='text' className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'/>
+        </div>
+
+        <button
+          className='text-lg text-main-black mt-20 bg-cta font-aufgang px-1 py-1'
+          onClick={() => write()}
+        >
+          Create Club
+        </button>
       </div>
     </div>
   );
