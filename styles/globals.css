@@ -4,6 +4,16 @@
 
 @layer base {
   @font-face {
+    font-family: 'Satoshi-Regular';
+    src: url(/styles/fonts/Satoshi-Regular.ttf)
+      format('ttf');
+  }
+  @font-face {
+    font-family: 'Satoshi-Medium';
+    src: url(/styles/fonts/Satoshi-Medium.ttf)
+      format('ttf');
+  }
+  @font-face {
     font-family: 'Budke';
     src: url(/styles/fonts/BBBAufgangOstGX.ttf)
       format('ttf');
