@@ -5,21 +5,22 @@ import { useState } from 'react';
 
 import ReleaseClub from '../abi/ReleaseClub.json';
 
-const Create: NextPage = () => {
-  interface Club {
-    name: string;
-    curators: string[];
+const Populate: NextPage = () => {
+  interface addNFT {
+    contractAddress: string;
   }
-
-  const [club, setClub] = useState<Club>({ name : '' , curators : []});
+  const [inputNFT, setInputNFT] = useState<addNFT>({
+    contractAddress:
+      'i.e. 0x63d46079d920e5dd1f0a38190764a...',
+  });
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
-        '0x17a306731ceE03Cf74feBE7c04f1B28898D0F360',
+        '0x47227af59cDb02C41501966a8ed92f47D1FD2858',
       contractInterface: ReleaseClub,
-      // not sure what it will actually be called
-      functionName: 'createNewClub',
-      args: [club.name, club.curators],
+      functionName: 'addRelease',
+      // takes two arguments, newReleases as a tuple, and length as a uint256
+      args: [inputNFT.contractAddress, 1],
       overrides: {
         gasLimit: 1000000,
       },
@@ -35,62 +36,52 @@ const Create: NextPage = () => {
       <Header />
       <div className='flex flex-wrap max-w-sm mx-auto'>
         <h1 className='text-4xl text-main-gray font-aufgang mt-32 my-8 w-full text-center'>
-          Create a new club
+          Add your NFTs
         </h1>
-        <div className='w-full font-satoshi-med'>
-          <label className='my-2 text-main-gray text-base'>
-            Name*
-          </label>
-          <input
-            type='text'
-            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0'
-            value={club.name}
-            onChange={(e) => {
-              e.preventDefault();
-              setClub((current) => {
-                return {
-                  ...current,
-                  name: e.target.value,
-                };
-              });
-            }}
-          />
-        </div>
-
         <div className='w-full font-satoshi-med mt-16'>
           <label className='my-1 text-main-gray text-base'>
-            Add curators
+            Add your Editions contract
           </label>
           <p className='text-main-gray-dark text-sm'>
-            Add wallet addresses for each collaborator in
-            this club. You will also be able to do this
-            later.
+            Place the contract address of the Zora Editions
+            NFT you wish to add to this club.
           </p>
           <input
             type='text'
             className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
-            value={club.curators}
+            // placeholder='i.e. 0x63d46079d920e5dd1f0a38190764a...'
+            value={inputNFT.contractAddress}
             onChange={(e) => {
               e.preventDefault();
-              setClub((current) => {
+              setInputNFT((current) => {
                 return {
                   ...current,
-                  curators: [e.target.value],
+                  contractAddress: e.target.value,
                 };
               });
             }}
           />
         </div>
+        <p className='text-main-gray-dark text-sm mt-12'>
+          Haven't minted an NFT using Zora's Editions
+          contracts? Mint your first one at{' '}
+          <a
+            className='text-cta'
+            href='http://create.zora.co/'
+          >
+            create.zora.co
+          </a>
+        </p>
 
         <button
-          className='text-lg text-main-black mt-20 bg-cta font-aufgang px-1 py-1'
+          className='text-lg text-main-black mt-8 bg-cta font-aufgang px-1 py-1'
           onClick={() => write()}
         >
-          Create Club
+          Update
         </button>
       </div>
     </div>
   );
 };
 
-export default Create;
+export default Populate;

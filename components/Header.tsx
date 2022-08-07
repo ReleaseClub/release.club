@@ -10,22 +10,13 @@ export const Header = () => {
           showBalance={false}
         />
       </div>
-      <div className="text-xl text-main-gray mr-8 font-aufgang">
+      <div className="text-xl text-main-gray-dark mr-8">
         <p>Settings</p>
       </div>
-      <Link href="/">
+      {/* <Link href="/">
         <img src="../assets/release_club_logo.png" />
-      </Link>
-      <div>
-        {/* included for logo reference */}
-        {/* <Link
-          href="/"
-        >
-          <a className="hover:text-[#f53bc3]">
-          HOME
-          </a>
-        </Link> */}
-      </div>
+      </Link> */}
+      
     </div>
   );
 };

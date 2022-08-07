@@ -7,6 +7,7 @@ const Create: NextPage = () => {
   const router: NextRouter = useRouter();
   const { clubAddress } = router.query;
   // XXX TODO use clubAddress to fetch releases and display below.
+  console.log(clubAddress)
   return (
     <div className='max-w-7xl mx-auto'>
       <Header />

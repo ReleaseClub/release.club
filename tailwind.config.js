@@ -8,8 +8,8 @@ module.exports = {
     extend: {
       fontFamily: {
         aufgang: ["Budke"],
-        "satoshi-reg": ["Satoshi-Regular"],
-        "satoshi-med": ["Satoshi-Medium"],
+        // "satoshi-reg": ["Satoshi-Regular"],
+        // "satoshi-med": ["Satoshi-Medium"],
       },
       colors: {
         "main-black": "#171718",
