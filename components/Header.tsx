@@ -1,20 +1,20 @@
-import Link from 'next/link';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Link from "next/link";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Header = () => {
   return (
-    <div className='flex flex-row-reverse justify-start max-w-8xl mx-auto my-8 items-center'>
+    <div className="flex flex-row-reverse justify-start max-w-8xl mx-auto my-8 items-center">
       <div>
         <ConnectButton
-          accountStatus='address'
+          accountStatus="address"
           showBalance={false}
         />
       </div>
-      <div className='text-xl text-main-gray mr-8 font-aufgang'>
+      <div className="text-xl text-main-gray mr-8 font-aufgang">
         <p>Settings</p>
       </div>
-      <Link href='/'>
-        <img src='../assets/release_club_logo.png' />
+      <Link href="/">
+        <img src="../assets/release_club_logo.png" />
       </Link>
       <div>
         {/* included for logo reference */}
