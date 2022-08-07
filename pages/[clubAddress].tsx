@@ -1,8 +1,12 @@
 import { NextPage } from 'next';
 import { Header } from '../components/Header';
 import { NFTPreview } from '@zoralabs/nft-components';
+import { useRouter, NextRouter } from 'next/router'
 
 const Create: NextPage = () => {
+  const router: NextRouter = useRouter();
+  const { clubAddress } = router.query;
+  // XXX TODO use clubAddress to fetch releases and display below.
   return (
     <div className='max-w-7xl mx-auto'>
       <Header />
