@@ -10,9 +10,9 @@ export const Header = () => {
           showBalance={false}
         />
       </div>
-      <div className="text-xl text-main-gray-dark mr-8">
+      {/* <div className="text-xl text-main-gray-dark mr-8">
         <p>Settings</p>
-      </div>
+      </div> */}
       {/* <Link href="/">
         <img src="../assets/release_club_logo.png" />
       </Link> */}

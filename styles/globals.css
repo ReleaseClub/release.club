@@ -4,19 +4,8 @@
 
 @layer base {
   @font-face {
-    font-family: 'Satoshi-Regular';
-    src: url(/styles/fonts/Satoshi-Regular.ttf)
-      format('ttf');
-  }
-  @font-face {
-    font-family: 'Satoshi-Medium';
-    src: url(/styles/fonts/Satoshi-Medium.ttf)
-      format('ttf');
-  }
-  @font-face {
-    font-family: 'Budke';
-    src: url(/styles/fonts/BBBAufgangOstGX.ttf)
-      format('ttf');
+    font-family: ['Turret-Road', cursive];
+    src: url('https://fonts.googleapis.com/css2?family=Turret+Road:wght@200;300;400;500;700;800&display=swap');
   }
   body {
     @apply bg-main-black;
