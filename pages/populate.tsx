@@ -71,7 +71,7 @@ const Populate: NextPage = () => {
           />
         </div>
         <p className='text-main-gray-dark text-sm mt-12'>
-          Haven't minted an NFT using Zora's Editions
+          Haven&apos;t minted an NFT using Zora&apos;s Editions
           contracts? Mint your first one at{' '}
           <a
             className='text-cta'
