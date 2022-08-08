@@ -1,13 +1,14 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { Header } from '../components/Header';
+import { ethers } from 'ethers';
 import {
   useContractWrite,
   useContractRead,
   useContractEvent,
   useWaitForTransaction,
 } from 'wagmi';
-import { useState } from 'react';
+import { useState, createContext } from 'react';
 
 // import { SuccessPopup } from '../components/SuccessPopup';
 
@@ -20,8 +21,6 @@ const Create: NextPage = () => {
 
   const [club, setClub] = useState<Club>({ name: '' });
 
-  // const [clubName, setClubName] = useState('');
-
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
@@ -32,6 +31,9 @@ const Create: NextPage = () => {
       onError(error) {
         console.log('error', error);
       },
+      // onSuccess(data) {
+      //   console.log('Your club was created')
+      // }
     });
 
   useContractEvent({
@@ -39,7 +41,11 @@ const Create: NextPage = () => {
       '0x0d07B6b3089E86d9F4DC899526F224788a469Ddd',
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
-    listener: (event) => console.log(event),
+    listener: (event) =>
+      console.log(
+        'Your club contract was created at',
+        event[0]
+      ),
   });
 
   return (
@@ -80,7 +86,9 @@ const Create: NextPage = () => {
             Create club
           </button>
           <Link href='/populate'>
-            <button className='mt-12 text-main-gray-dark text-base hover:text-main-gray'>Continue</button>
+            <button className='mt-12 text-main-gray-dark text-base hover:text-main-gray'>
+              Continue
+            </button>
           </Link>
         </div>
       </div>

@@ -1,9 +1,11 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { Header } from '../components/Header';
-import { ClubAddress } from '../components/ClubAddress';
 import { useContractWrite, useContractEvent } from 'wagmi';
 import { useState } from 'react';
+import { ethers, BigNumber } from 'ethers';
+
+import { ClubData } from '../components/ClubData';
 
 import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
@@ -18,6 +20,7 @@ const Populate: NextPage = () => {
       'i.e. 0x63d46079d920e5dd1f0a38190764a...',
   });
 
+  const firstToken = BigNumber.from(1).toString();
   const { data, isError, isLoading, write } =
     useContractWrite({
       // address below should be that of the newly created club contract
@@ -26,10 +29,8 @@ const Populate: NextPage = () => {
       contractInterface: ReleaseClub,
       functionName: 'addRelease',
       args: [
-        {
-          tokenContract: inputNFT.contractAddress,
-          tokenID: 1,
-        },
+        inputNFT.contractAddress, 
+        firstToken
       ],
       overrides: {
         gasLimit: 1000000,
@@ -41,7 +42,7 @@ const Populate: NextPage = () => {
       <Header />
       <div className='flex flex-wrap max-w-sm mx-auto'>
         <h1 className='text-4xl text-main-gray font-tr mt-32 my-8 w-full text-center'>
-          Add NFTs to{' '}
+          Add NFTs to <ClubData />
           <div className='max-w-sm mx-auto'></div>
         </h1>
         <div className='w-full mt-16'>
