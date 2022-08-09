@@ -8,6 +8,7 @@ import {
 } from 'wagmi';
 import toast, {Toaster} from 'react-hot-toast';
 import { useState } from 'react';
+import router from 'next/router';
 
 // import { SuccessPopup } from '../components/SuccessPopup';
 
@@ -72,7 +73,10 @@ const Create: NextPage = () => {
           'aria-live': 'polite',
         },
       });
-    
+      router.push({
+        pathname: 'populate',
+        query: {},
+      });
     },
       
   });
