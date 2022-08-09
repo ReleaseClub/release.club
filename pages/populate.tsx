@@ -3,6 +3,7 @@ import { Header } from '../components/Header';
 import { useContractWrite, useContractRead, useContractEvent } from 'wagmi';
 import { useState } from 'react';
 
+import toast, {Toaster} from 'react-hot-toast'
 import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
 import { BigNumber, ethers } from 'ethers';
@@ -25,6 +26,10 @@ const Populate: NextPage = () => {
     tokenContract:test,
     tokenID:ethers.BigNumber.from("1")
   })
+  A.push({
+    tokenContract:test,
+    tokenID:ethers.BigNumber.from("2")
+  })
   console.log(A)
   const { data, isError, isLoading, write } =
     useContractWrite({
@@ -36,6 +41,7 @@ const Populate: NextPage = () => {
       args:[A],
       onSuccess(cancelData,variables,context){
         console.log("Success!", cancelData);
+
       }
       // onError(error, variables, context) {
       //     console.log("error", error)
@@ -52,7 +58,34 @@ const Populate: NextPage = () => {
       // listener: (event) => (
       //   setClubName(event[1]), console.log(clubName)
       // ),
-      listener: (event) => console.log(event),
+      listener: (event) =>{
+         console.log(event);
+         toast.success('NFT Deployed', {
+          duration: 4000,
+          position: 'top-right',
+    
+          // Custom Icon
+          icon: '👏',
+          // Change colors of success/error/loading icon
+          iconTheme: {
+            primary: '#0a0',
+            secondary: '#fff',
+          },
+          // styling
+        style: {
+          border: '1px solid #FFFDF8',
+          padding: '8px 12px',
+          color: '#FFFDF8',
+          backgroundColor: '#1E1E1E'
+          // minWidth: '300px'
+        },
+          // Aria
+          ariaProps: {
+            role: 'status',
+            'aria-live': 'polite',
+          },
+        });
+        },
     });
 
     // useContractEvent({
@@ -111,6 +144,7 @@ const Populate: NextPage = () => {
           Add NFT
         </button>
       </div>
+      <Toaster/>
     </div>
   );
 };
