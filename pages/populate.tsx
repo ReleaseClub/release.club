@@ -80,9 +80,9 @@ const Populate: NextPage = () => {
       // ),
       listener: (event) =>{
          console.log(event);
-         toast.success('NFT Deployed', {
+         toast.success('Your NFT has been added to your club', {
           duration: 4000,
-          position: 'top-right',
+          position: 'top-left',
     
           // Custom Icon
           icon: '👏',
