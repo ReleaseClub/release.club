@@ -131,7 +131,7 @@ const Populate: NextPage = () => {
           contracts? Mint your first one at{' '}
           <a
             className='text-cta'
-            href='http://create.zora.co/create/edition'
+            href='http://create.zora.co/create/edition' target="_blank"
           >
             create.zora.co
           </a>
