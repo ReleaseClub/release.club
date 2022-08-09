@@ -57,6 +57,7 @@ const Populate: NextPage = (props: pageProps) => {
       args: [newReleases],
       onSuccess(data) {
         setHash(data.hash);
+        console.log(typeof(clubAddress))
       },
       onError(error) {
         console.log(error);
@@ -89,7 +90,6 @@ const Populate: NextPage = (props: pageProps) => {
     if (status === 'success') {
       router.push({
         pathname: clubAddress,
-        query: {},
       });
     }
   }, [status]);
