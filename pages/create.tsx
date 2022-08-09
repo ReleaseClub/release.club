@@ -13,6 +13,7 @@ import { useState } from 'react';
 
 import ClubFactory from '../abi/ClubFactory.json';
 import { FACTORY_ADDRESS } from '../config/constants';
+import router from 'next/router';
 
 const Create: NextPage = () => {
   interface Club {
@@ -70,6 +71,10 @@ const Create: NextPage = () => {
           role: 'status',
           'aria-live': 'polite',
         },
+      });
+      router.push({
+        pathname: 'populate',
+        query: {},
       });
 
     },
