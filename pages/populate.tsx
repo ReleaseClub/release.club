@@ -59,7 +59,7 @@ const Populate: NextPage = (props: pageProps) => {
         setHash(data.hash);
       },
       onError(error) {
-        console.log('error', error);
+        console.log(error);
       },
     });
 

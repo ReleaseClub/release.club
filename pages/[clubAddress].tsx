@@ -1,18 +1,28 @@
 import { NextPage } from 'next';
 import { Header } from '../components/Header';
+import { ClubName } from '../components/ClubName';
 import { NFTPreview } from '@zoralabs/nft-components';
 import { useRouter, NextRouter } from 'next/router';
 
-const Create: NextPage = () => {
+import ReleaseClub from '../abi/ReleaseClub.json';
+import { useContractRead } from 'wagmi'
+
+const Club: NextPage = () => {
   const router: NextRouter = useRouter();
   const { clubAddress } = router.query;
 
-  console.log(clubAddress);
+  // const { data, isError, isLoading } = useContractRead({
+  //     addressOrName: '0xecb504d39723b0be0e3a9aa33d646642d1051ee1',
+  //     contractInterface: ReleaseClub,
+  //     functionName: 'viewReleases',
+  //   })
+  // }
+
   return (
     <div className='max-w-7xl mx-auto'>
       <Header />
       <h1 className='my-8 ml-3 text-4xl text-main-gray font-aufgang'>
-        Metabolism
+        <ClubName />
       </h1>
       <div className='flex flex-wrap justify-between'>
         <NFTPreview
@@ -49,4 +59,4 @@ const Create: NextPage = () => {
   );
 };
 
-export default Create;
+export default Club;

@@ -22,10 +22,6 @@ const Create: NextPage = () => {
     string | undefined
   >(undefined);
 
-  const [clubName, setClubName] = useState<
-    string | undefined
-  >(undefined);
-
   const [hash, setHash] = useState<string | undefined>(
     undefined
   );
@@ -40,12 +36,24 @@ const Create: NextPage = () => {
       functionName: 'addClub',
       args: club.name,
       onSuccess(data) {
+        console.log('data', data);
         setHash(data.hash);
       },
       onError(error) {
         console.log('error', error);
       },
     });
+
+  useContractEvent({
+    addressOrName:
+      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
+    contractInterface: ClubFactory,
+    eventName: 'ClubCreated',
+    listener: (event) => {
+      console.log('address:', event[0], 'name:', event[1]);
+      setClubAddress(event[0]);
+    },
+  });
 
   const { status } = useWaitForTransaction({
     hash: hash,
@@ -79,20 +87,6 @@ const Create: NextPage = () => {
       });
     }
   }, [status]);
-
-
-  // MAYBE PUT THIS ELSEWHERE
-  useContractEvent({
-    addressOrName:
-      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
-    contractInterface: ClubFactory,
-    eventName: 'ClubCreated',
-    listener: (event) => {
-      console.log('address:', event[0], 'name:', event[1]);
-      setClubAddress(event[0]);
-      setClubName(event[1]);
-    },
-  });
 
   return (
     <div className='max-w-7xl mx-auto'>
