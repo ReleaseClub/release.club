@@ -1,19 +1,19 @@
 import { NextPage } from 'next';
 import { Header } from '../components/Header';
+import toast, { Toaster } from 'react-hot-toast';
+import { useState } from 'react';
+import router from 'next/router';
+
 import {
   useContractWrite,
   useContractRead,
   useContractEvent,
   useWaitForTransaction,
 } from 'wagmi';
-import toast, { Toaster } from 'react-hot-toast';
-import { useState } from 'react';
-
 // import { SuccessPopup } from '../components/SuccessPopup';
 
 import ClubFactory from '../abi/ClubFactory.json';
 import { FACTORY_ADDRESS } from '../config/constants';
-import router from 'next/router';
 
 const Create: NextPage = () => {
   interface Club {
