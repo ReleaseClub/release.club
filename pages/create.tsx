@@ -6,13 +6,14 @@ import {
   useContractEvent,
   useWaitForTransaction,
 } from 'wagmi';
-import toast, {Toaster} from 'react-hot-toast';
-import { useState,useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import { useState, useEffect } from 'react';
 import router from 'next/router';
 
 // import { SuccessPopup } from '../components/SuccessPopup';
 
 import ClubFactory from '../abi/ClubFactory.json';
+import { FACTORY_ADDRESS } from '../config/constants';
 
 const Create: NextPage = () => {
   interface Club {
@@ -21,39 +22,37 @@ const Create: NextPage = () => {
 
   const [club, setClub] = useState<Club>({ name: '' });
 
-  const [clubAdd, setClubAdd] = useState<string|undefined>(undefined);
-  const [hash, setHash]= useState<string|undefined>(undefined);
-  const {status}=useWaitForTransaction({
-    hash:hash
+  const [clubAdd, setClubAdd] = useState<string | undefined>(undefined);
+  const [hash, setHash] = useState<string | undefined>(undefined);
+  const { status } = useWaitForTransaction({
+    hash: hash
   })
-  
+
   useEffect(() => {
     // Update the document title using the browser API
-    console.log("STAT",status,clubAdd)
-    if(status==='success')
-  {
-    router.push({
-      pathname: 'populate',
-      query: {
-        clubAddress:clubAdd
-      },
-    });
-  }
-  },[status]);
+    console.log("STAT", status, clubAdd)
+    if (status === 'success') {
+      router.push({
+        pathname: 'populate',
+        query: {
+          clubAddress: clubAdd
+        },
+      });
+    }
+  }, [status]);
   // const [clubName, setClubName] = useState('');
 
   const { data, isError, isLoading, write } =
     useContractWrite({
-      addressOrName:
-        '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
+      addressOrName: FACTORY_ADDRESS,
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
-      
-      onSuccess(cancelData,variables,context){
+
+      onSuccess(cancelData, variables, context) {
         console.log("Success!", cancelData);
         setHash(cancelData.hash);
-      
+
       },
       onError(error) {
         console.log('error', error);
@@ -64,20 +63,19 @@ const Create: NextPage = () => {
     });
 
   useContractEvent({
-    addressOrName:
-      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
+    addressOrName: FACTORY_ADDRESS,
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
     // listener: (event) => (
     //   setClubName(event[1]), console.log(clubName)
     // ),
     listener: (event) => {
-      console.log("RH",event);
+      console.log("RH", event);
       setClubAdd(event[0]);
       toast.success('Club Created Successfully', {
         duration: 4000,
         position: 'top-left',
-  
+
         // Custom Icon
         icon: '👏',
         // Change colors of success/error/loading icon
@@ -86,13 +84,13 @@ const Create: NextPage = () => {
           secondary: '#fff',
         },
         // styling
-      style: {
-        border: '1px solid #FFFDF8',
-        padding: '8px 12px',
-        color: '#FFFDF8',
-        backgroundColor: '#1E1E1E'
-        // minWidth: '300px'
-      },
+        style: {
+          border: '1px solid #FFFDF8',
+          padding: '8px 12px',
+          color: '#FFFDF8',
+          backgroundColor: '#1E1E1E'
+          // minWidth: '300px'
+        },
         // Aria
         ariaProps: {
           role: 'status',
@@ -100,7 +98,7 @@ const Create: NextPage = () => {
         },
       });
     },
-      
+
   });
 
   return (
@@ -166,7 +164,7 @@ const Create: NextPage = () => {
           Create club
         </button>
       </div>
-      <Toaster/>
+      <Toaster />
     </div>
   );
 };
