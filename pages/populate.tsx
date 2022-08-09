@@ -8,6 +8,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
 import { BigNumber, ethers } from 'ethers';
+import { useForm } from 'react-hook-form';
 
 interface Query {
   clubAddress: string
@@ -21,6 +22,7 @@ interface pageProps {
 }
 
 const Populate: NextPage = (props: pageProps) => {
+
   interface addNFT {
     contractAddress: string;
   }
@@ -28,6 +30,16 @@ const Populate: NextPage = (props: pageProps) => {
     tokenContract: string;
     tokenID: BigNumber;
   }
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [formData, setFormData] = useState();
+  const onSubmit = (data: any) => {
+    //console.log(data);
+    setFormData(data);
+  };
+
+  console.log("Form data ---> ", formData);
+  console.log(errors);
+
   const [inputNFT, setInputNFT] = useState<addNFT>({
     contractAddress:
       'i.e. 0x63d46079d920e5dd1f0a38190764a...',
@@ -141,7 +153,7 @@ const Populate: NextPage = (props: pageProps) => {
             Place the contract address of the Zora Editions
             NFT you wish to add to this club.
           </p>
-          <input
+          {/* <input
             placeholder='0xa78491157f43125f4a67050be2d90bA01eBCd2d4'
             type='text'
             className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
@@ -155,26 +167,37 @@ const Populate: NextPage = (props: pageProps) => {
                 };
               });
             }}
-          />
+          /> */}
+          <div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label>Contract Address</label>
+              <div style={{ padding: "2em" }}>
+                <input type="text" placeholder="NFT Address" />
+              </div>
+              <button style={{ background: "blue" }}>
+                Add NFT
+              </button>
+            </form>
+          </div>
         </div>
         <p className='text-main-gray-dark text-sm mt-12'>
           Haven&apos;t minted an NFT using Zora&apos;s Editions
           contracts? Mint your first one at{' '}
           <a
             className='text-cta'
-            href='http://create.zora.co/create/edition' target="_blank" 
+            href='http://create.zora.co/create/edition' target="_blank"
             rel="noopener noreferrer"
           >
             create.zora.co
           </a>
         </p>
 
-        <button
+        {/* <button
           className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray'
           onClick={() => write()}
         >
           Add NFT
-        </button>
+        </button> */}
       </div>
       <Toaster />
     </div>
