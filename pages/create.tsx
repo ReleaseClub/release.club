@@ -7,7 +7,7 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import toast, {Toaster} from 'react-hot-toast';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import router from 'next/router';
 
 // import { SuccessPopup } from '../components/SuccessPopup';
@@ -19,8 +19,27 @@ const Create: NextPage = () => {
     name: string;
   }
 
+  const [hash, setHash]= useState<string|undefined>(undefined);
   const [club, setClub] = useState<Club>({ name: '' });
+  let clubAdd:string;
 
+  const {status}=useWaitForTransaction({
+    hash:hash
+  })
+  
+  useEffect(() => {
+    // Update the document title using the browser API
+    console.log("STAT",status)
+    if(status==='success')
+  {
+    router.push({
+      pathname: '/populate',
+      query: {
+        clubAdd:clubAdd,
+      },
+    });
+  }
+  },[status]);
   // const [clubName, setClubName] = useState('');
 
   const { data, isError, isLoading, write } =
@@ -48,6 +67,7 @@ const Create: NextPage = () => {
     // ),
     listener: (event) => {
       console.log("RH",event);
+      clubAdd=event[0];
       toast.success('Club Created Successfully', {
         duration: 4000,
         position: 'top-left',

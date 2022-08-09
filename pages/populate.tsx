@@ -1,18 +1,20 @@
+// @ts-ignore
 import { NextPage } from 'next';
 import { Header } from '../components/Header';
 import { useContractWrite, useContractRead, useContractEvent, useWaitForTransaction } from 'wagmi';
 import { useState,useEffect } from 'react';
-import router from 'next/router';
+import router, { withRouter } from 'next/router';
 
 import toast, {Toaster} from 'react-hot-toast'
 import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
 import { BigNumber, ethers } from 'ethers';
 
-const Populate: NextPage = () => {
+const Populate: NextPage = (props) => {
   interface addNFT {
     contractAddress: string;
   }
+  
   interface Release {
     tokenContract: string;
     tokenID:BigNumber;
@@ -25,6 +27,8 @@ const Populate: NextPage = () => {
   });
   let test:string= "0x47227af59cDb02C41501966a8ed92f47D1FD2858";
   let A:Release[] = [];
+
+  let clubAdd=props.router.query.clubAdd?props.router.query.clubAdd:"0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399";
   A.push({
     tokenContract:test,
     tokenID:ethers.BigNumber.from("1")
@@ -53,7 +57,7 @@ const Populate: NextPage = () => {
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
-        '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399',
+        clubAdd,
       contractInterface: ReleaseClub,
       functionName: 'addRelease',
       // takes two arguments, newReleases as a tuple, and length as a uint256
@@ -72,7 +76,7 @@ const Populate: NextPage = () => {
 
     useContractEvent({
       addressOrName:
-        '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399',
+        clubAdd,
       contractInterface: ReleaseClub,
       eventName: 'NewRelease',
       // listener: (event) => (
@@ -169,4 +173,4 @@ const Populate: NextPage = () => {
   );
 };
 
-export default Populate;
+export default withRouter(Populate);
