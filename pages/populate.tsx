@@ -3,13 +3,13 @@ import { Header } from '../components/Header';
 import { useContractWrite, useContractRead, useContractEvent, useWaitForTransaction } from 'wagmi';
 import { useState,useEffect } from 'react';
 import router from 'next/router';
-
+import { withRouter } from 'next/router'
 import toast, {Toaster} from 'react-hot-toast'
 import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
 import { BigNumber, ethers } from 'ethers';
 
-const Populate: NextPage = () => {
+const Populate: NextPage = (props) => {
   interface addNFT {
     contractAddress: string;
   }
@@ -17,8 +17,6 @@ const Populate: NextPage = () => {
     tokenContract: string;
     tokenID:BigNumber;
   }
-
-  const [hash, setHash]= useState<string|undefined>(undefined);
   const [inputNFT, setInputNFT] = useState<addNFT>({
     contractAddress:
       'i.e. 0x63d46079d920e5dd1f0a38190764a...',
@@ -35,6 +33,7 @@ const Populate: NextPage = () => {
   })
   console.log(A)
 
+  const [hash, setHash]= useState<string|undefined>(undefined);
   const {status}=useWaitForTransaction({
     hash:hash
   })
@@ -50,10 +49,12 @@ const Populate: NextPage = () => {
     });
   }
   },[status]);
+  const contractAddress=props.router.query.clubAddress?props.router.query.clubAddress:'0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399';
+  console.log("Contr",contractAddress)
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
-        '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399',
+        contractAddress,
       contractInterface: ReleaseClub,
       functionName: 'addRelease',
       // takes two arguments, newReleases as a tuple, and length as a uint256
@@ -72,7 +73,7 @@ const Populate: NextPage = () => {
 
     useContractEvent({
       addressOrName:
-        '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399',
+        contractAddress,
       contractInterface: ReleaseClub,
       eventName: 'NewRelease',
       // listener: (event) => (
@@ -169,4 +170,4 @@ const Populate: NextPage = () => {
   );
 };
 
-export default Populate;
+export default withRouter(Populate);
