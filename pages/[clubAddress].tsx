@@ -1,11 +1,14 @@
 import { NextPage } from 'next';
 import { Header } from '../components/Header';
 import { ClubName } from '../components/ClubName';
-import { NFTPreview } from '@zoralabs/nft-components';
 import { useRouter, NextRouter } from 'next/router';
-
+import { useState } from 'react';
 import ReleaseClub from '../abi/ReleaseClub.json';
 import { useContractRead } from 'wagmi';
+import {
+  NFTPreview,
+} from '@zoralabs/nft-components';
+import { useNFT } from '@zoralabs/nft-hooks'
 
 interface Query {
   clubAddress: string;
@@ -29,12 +32,15 @@ const Club: NextPage = (props: pageProps) => {
   console.log('from router', clubAddressFromRouter);
   console.log(typeof clubAddressFromRouter);
 
+  const [renderedNFT, setRenderedNFT] = useState();
+
   const { data, isError, isLoading } = useContractRead({
     addressOrName: clubAddressFromRouter,
     contractInterface: ReleaseClub,
     functionName: 'releases',
     args: [0],
     onSuccess() {
+      setRenderedNFT(data[0]);
       console.log('returned NFT', data[0]);
       // console.log(data)
     },
@@ -47,11 +53,14 @@ const Club: NextPage = (props: pageProps) => {
         <ClubName />
       </h1>
       <div className='flex flex-wrap justify-between'>
-        <NFTPreview
-          className='my-4'
-          contract={data[0]}
-          id='1'
-        />
+    
+          <NFTPreview
+            className='my-4'
+            contract='0x63d46079d920e5dd1f0a38190764aa1845dc4bc6'
+            id='1'
+          
+          />
+        {renderedNFT}
       </div>
     </div>
   );
