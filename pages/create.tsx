@@ -69,7 +69,6 @@ const Create: NextPage = () => {
     },
   });
 
-  // START HERE
   useEffect(() => {
     if (status === 'success') {
       router.push({
@@ -81,6 +80,8 @@ const Create: NextPage = () => {
     }
   }, [status]);
 
+
+  // MAYBE PUT THIS ELSEWHERE
   useContractEvent({
     addressOrName:
       '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',

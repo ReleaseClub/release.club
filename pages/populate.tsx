@@ -26,10 +26,6 @@ interface pageProps {
 }
 
 const Populate: NextPage = (props: pageProps) => {
-
-  // dismisses the toast from create.tsx
-  useEffect(() => toast.dismiss());
-
   interface addNFT {
     contractAddress: string;
   }
@@ -41,93 +37,62 @@ const Populate: NextPage = (props: pageProps) => {
     contractAddress: '',
   });
 
-  //START HERE
-  let test: string =
-    '0x47227af59cDb02C41501966a8ed92f47D1FD2858';
-  let A: Release[] = [];
-  A.push({
-    tokenContract: test,
-    tokenID: ethers.BigNumber.from('1'),
-  });
-  A.push({
-    tokenContract: test,
-    tokenID: ethers.BigNumber.from('2'),
-  });
-  console.log(A);
-
   const [hash, setHash] = useState<string | undefined>(
     undefined
   );
+
+  const clubAddress = props.router.query.clubAddress;
+
+  const newReleases: Release[] = [];
+  newReleases.push({
+    tokenContract: inputNFT.contractAddress,
+    tokenID: ethers.BigNumber.from('1'),
+  });
+
+  const { data, isError, isLoading, write } =
+    useContractWrite({
+      addressOrName: clubAddress,
+      contractInterface: ReleaseClub,
+      functionName: 'addRelease',
+      args: [newReleases],
+      onSuccess(data) {
+        setHash(data.hash);
+      },
+      onError(error) {
+        console.log('error', error);
+      },
+    });
+
   const { status } = useWaitForTransaction({
     hash: hash,
+    onSuccess() {
+      // toast config
+      toast.success('Your NFT was added to the club', {
+        icon: null,
+        duration: 4000,
+        position: 'top-left',
+        style: {
+          border: '1px solid #FFB5A7',
+          padding: '8px 12px',
+          color: '#8F8E94',
+          backgroundColor: '#171718',
+        },
+        ariaProps: {
+          role: 'status',
+          'aria-live': 'polite',
+        },
+      });
+    },
   });
 
   useEffect(() => {
-    // Update the document title using the browser API
-    console.log('STAT', status);
     if (status === 'success') {
       router.push({
-        pathname: 'protocol',
+        pathname: clubAddress,
         query: {},
       });
     }
   }, [status]);
-  const contractAddress = props.router.query.clubAddress
-    ? props.router.query.clubAddress
-    : '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399';
-  console.log('Contr', contractAddress);
-  const { data, isError, isLoading, write } =
-    useContractWrite({
-      addressOrName: contractAddress,
-      contractInterface: ReleaseClub,
-      functionName: 'addRelease',
-      // takes two arguments, newReleases as a tuple, and length as a uint256
-      args: [A],
-      onSuccess(cancelData, variables, context) {
-        console.log('Success!', cancelData);
-        setHash(cancelData.hash);
-      },
-    });
-
-  useContractEvent({
-    addressOrName: contractAddress,
-    contractInterface: ReleaseClub,
-    eventName: 'NewRelease',
-    // listener: (event) => (
-    //   setClubName(event[1]), console.log(clubName)
-    // ),
-    listener: (event) => {
-      console.log(event);
-      toast.success(
-        'Your NFT has been added to your club',
-        {
-          duration: 4000,
-          position: 'top-left',
-
-          // Custom Icon
-          icon: '👏',
-          // Change colors of success/error/loading icon
-          iconTheme: {
-            primary: '#0a0',
-            secondary: '#fff',
-          },
-          // styling
-          style: {
-            border: '1px solid #FFFDF8',
-            padding: '8px 12px',
-            color: '#FFFDF8',
-            backgroundColor: '#1E1E1E',
-            // minWidth: '300px'
-          },
-          // Aria
-          ariaProps: {
-            role: 'status',
-            'aria-live': 'polite',
-          },
-        }
-      );
-    },
-  });
 
   return (
     <div className='max-w-7xl mx-auto'>
@@ -160,7 +125,6 @@ const Populate: NextPage = (props: pageProps) => {
             }}
           />
         </div>
-       
 
         <button
           className='text-lg text-main-black mt-12 bg-cta font-tr px-2 py-1 hover:bg-main-gray w-full'
