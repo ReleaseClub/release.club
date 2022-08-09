@@ -26,25 +26,10 @@ const Create: NextPage = () => {
     string | undefined
   >(undefined);
 
-  // const [hash, setHash] = useState<string | undefined>(
-  //   undefined
-  // );
+  const [hash, setHash] = useState<string | undefined>(
+    undefined
+  );
 
-  // const { status } = useWaitForTransaction({
-  //   hash: hash,
-  // });
-
-  // useEffect(() => {
-  //   console.log('Status', status, clubAdd);
-  //   if (status === 'success') {
-  //     router.push({
-  //       pathname: 'populate',
-  //       query: {
-  //         clubAddress: clubAdd,
-  //       },
-  //     });
-  //   }
-  // }, [status]);
 
   const [loading, setLoading] = useState(false);
 
@@ -55,14 +40,28 @@ const Create: NextPage = () => {
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
-      // onSuccess(cancelData, variables, context) {
-      //   console.log('Success!', cancelData);
-      //   setHash(cancelData.hash);
-      // },
+      onSuccess(data) {
+        setHash(data.hash);
+      },
       onError(error) {
         console.log('error', error);
       },
     });
+
+  const { status } = useWaitForTransaction({
+    hash: hash,
+  });
+
+  useEffect(() => {
+    if (status === 'success') {
+      router.push({
+        pathname: 'populate',
+        // query: {
+        //   clubAddress: clubAdd,
+        // },
+      });
+    }
+  }, [status]);
 
   useContractEvent({
     addressOrName:
@@ -70,14 +69,14 @@ const Create: NextPage = () => {
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
     listener: (event) => {
-      console.log('address', event[0], 'name', event[1]);
+      console.log('address:', event[0], 'name:', event[1]);
       setClubAddress(event[0]);
       setClubName(event[1]);
 
       // toast config
       toast.success('Your club was created successfully', {
         icon: null,
-        duration: 5000,
+        duration: 4000,
         position: 'top-left',
         style: {
           border: '1px solid #FFB5A7',
