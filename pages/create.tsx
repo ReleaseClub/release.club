@@ -93,10 +93,6 @@ const Create: NextPage = () => {
           'aria-live': 'polite',
         },
       });
-      router.push({
-        pathname: 'populate',
-        query: {},
-      });
     },
       
   });
