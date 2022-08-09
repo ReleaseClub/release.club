@@ -7,7 +7,7 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import toast, {Toaster} from 'react-hot-toast';
-import { useState, useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import router from 'next/router';
 
 // import { SuccessPopup } from '../components/SuccessPopup';
@@ -19,23 +19,23 @@ const Create: NextPage = () => {
     name: string;
   }
 
-  const [hash, setHash]= useState<string|undefined>(undefined);
   const [club, setClub] = useState<Club>({ name: '' });
-  let clubAdd:string;
 
+  const [clubAdd, setClubAdd] = useState<string|undefined>(undefined);
+  const [hash, setHash]= useState<string|undefined>(undefined);
   const {status}=useWaitForTransaction({
     hash:hash
   })
   
   useEffect(() => {
     // Update the document title using the browser API
-    console.log("STAT",status)
+    console.log("STAT",status,clubAdd)
     if(status==='success')
   {
     router.push({
-      pathname: '/populate',
+      pathname: 'populate',
       query: {
-        clubAdd:clubAdd,
+        clubAddress:clubAdd
       },
     });
   }
@@ -49,9 +49,15 @@ const Create: NextPage = () => {
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
+      
+      onSuccess(cancelData,variables,context){
+        console.log("Success!", cancelData);
+        setHash(cancelData.hash);
+      
+      },
       onError(error) {
         console.log('error', error);
-      },
+      }
       // onSuccess(cancelData, variables, context) {
       //   console.log('Success!', cancelData);
       // },
@@ -67,7 +73,7 @@ const Create: NextPage = () => {
     // ),
     listener: (event) => {
       console.log("RH",event);
-      clubAdd=event[0];
+      setClubAdd(event[0]);
       toast.success('Club Created Successfully', {
         duration: 4000,
         position: 'top-left',
