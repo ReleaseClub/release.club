@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
 import { Header } from '../components/Header';
-import { useContractWrite, useContractRead, useContractEvent } from 'wagmi';
-import { useState } from 'react';
+import { useContractWrite, useContractRead, useContractEvent, useWaitForTransaction } from 'wagmi';
+import { useState,useEffect } from 'react';
+import router from 'next/router';
 
 import toast, {Toaster} from 'react-hot-toast'
 import ReleaseClub from '../abi/ReleaseClub.json';
@@ -16,6 +17,8 @@ const Populate: NextPage = () => {
     tokenContract: string;
     tokenID:BigNumber;
   }
+
+  const [hash, setHash]= useState<string|undefined>(undefined);
   const [inputNFT, setInputNFT] = useState<addNFT>({
     contractAddress:
       'i.e. 0x63d46079d920e5dd1f0a38190764a...',
@@ -31,6 +34,22 @@ const Populate: NextPage = () => {
     tokenID:ethers.BigNumber.from("2")
   })
   console.log(A)
+
+  const {status}=useWaitForTransaction({
+    hash:hash
+  })
+  
+  useEffect(() => {
+    // Update the document title using the browser API
+    console.log("STAT",status)
+    if(status==='success')
+  {
+    router.push({
+      pathname: 'protocol',
+      query: {},
+    });
+  }
+  },[status]);
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
@@ -41,7 +60,8 @@ const Populate: NextPage = () => {
       args:[A],
       onSuccess(cancelData,variables,context){
         console.log("Success!", cancelData);
-
+        setHash(cancelData.hash);
+      
       }
       // onError(error, variables, context) {
       //     console.log("error", error)
