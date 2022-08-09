@@ -32,6 +32,31 @@ const Create: NextPage = () => {
     // Update the document title using the browser API
     console.log("STAT", status, clubAdd)
     if (status === 'success') {
+      toast.success('Club Created Successfully', {
+        duration: 4000,
+        position: 'top-left',
+
+        // Custom Icon
+        icon: '👏',
+        // Change colors of success/error/loading icon
+        iconTheme: {
+          primary: '#0a0',
+          secondary: '#fff',
+        },
+        // styling
+        style: {
+          border: '1px solid #FFFDF8',
+          padding: '8px 12px',
+          color: '#FFFDF8',
+          backgroundColor: '#1E1E1E'
+          // minWidth: '300px'
+        },
+        // Aria
+        ariaProps: {
+          role: 'status',
+          'aria-live': 'polite',
+        },
+      });
       router.push({
         pathname: 'populate',
         query: {
@@ -72,31 +97,7 @@ const Create: NextPage = () => {
     listener: (event) => {
       console.log("RH", event);
       setClubAdd(event[0]);
-      toast.success('Club Created Successfully', {
-        duration: 4000,
-        position: 'top-left',
-
-        // Custom Icon
-        icon: '👏',
-        // Change colors of success/error/loading icon
-        iconTheme: {
-          primary: '#0a0',
-          secondary: '#fff',
-        },
-        // styling
-        style: {
-          border: '1px solid #FFFDF8',
-          padding: '8px 12px',
-          color: '#FFFDF8',
-          backgroundColor: '#1E1E1E'
-          // minWidth: '300px'
-        },
-        // Aria
-        ariaProps: {
-          role: 'status',
-          'aria-live': 'polite',
-        },
-      });
+      
     },
 
   });

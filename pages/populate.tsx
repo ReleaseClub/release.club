@@ -53,44 +53,6 @@ const Populate: NextPage = (props: pageProps) => {
     // Update the document title using the browser API
     console.log("STAT", status)
     if (status === 'success') {
-      router.push({
-        pathname: 'protocol',
-        query: {},
-      });
-    }
-  }, [status]);
-  const contractAddress = props.router.query.clubAddress ? props.router.query.clubAddress : '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399';
-  console.log("Contr", contractAddress)
-  const { data, isError, isLoading, write } =
-    useContractWrite({
-      addressOrName:
-        contractAddress,
-      contractInterface: ReleaseClub,
-      functionName: 'addRelease',
-      // takes two arguments, newReleases as a tuple, and length as a uint256
-      args: [A],
-      onSuccess(cancelData, variables, context) {
-        console.log("Success!", cancelData);
-        setHash(cancelData.hash);
-
-      }
-      // onError(error, variables, context) {
-      //     console.log("error", error)
-      // },
-      // onSuccess(cancelData, variables, context) {
-      //     console.log("Success!", cancelData)
-    });
-
-  useContractEvent({
-    addressOrName:
-      contractAddress,
-    contractInterface: ReleaseClub,
-    eventName: 'NewRelease',
-    // listener: (event) => (
-    //   setClubName(event[1]), console.log(clubName)
-    // ),
-    listener: (event) => {
-      console.log(event);
       toast.success('Your NFT has been added to your club', {
         duration: 4000,
         position: 'top-left',
@@ -116,8 +78,33 @@ const Populate: NextPage = (props: pageProps) => {
           'aria-live': 'polite',
         },
       });
-    },
-  });
+      router.push({
+        pathname: contractAddress,
+        query: {},
+      });
+    }
+  }, [status]);
+  const contractAddress = props.router.query.clubAddress ? props.router.query.clubAddress : '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399';
+  console.log("Contr", contractAddress)
+  const { data, isError, isLoading, write } =
+    useContractWrite({
+      addressOrName:
+        contractAddress,
+      contractInterface: ReleaseClub,
+      functionName: 'addRelease',
+      // takes two arguments, newReleases as a tuple, and length as a uint256
+      args: [A],
+      onSuccess(cancelData, variables, context) {
+        console.log("Success!", cancelData);
+        setHash(cancelData.hash);
+
+      }
+      // onError(error, variables, context) {
+      //     console.log("error", error)
+      // },
+      // onSuccess(cancelData, variables, context) {
+      //     console.log("Success!", cancelData)
+    });
 
   // useContractEvent({
   //   addressOrName: '0x47227af59cDb02C41501966a8ed92f47D1FD2858',
@@ -162,7 +149,7 @@ const Populate: NextPage = (props: pageProps) => {
           contracts? Mint your first one at{' '}
           <a
             className='text-cta'
-            href='http://create.zora.co/create/edition' target="_blank"
+            href='http://create.zora.co/create/edition'
           >
             create.zora.co
           </a>
