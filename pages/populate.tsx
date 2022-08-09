@@ -26,6 +26,10 @@ interface pageProps {
 }
 
 const Populate: NextPage = (props: pageProps) => {
+
+  // dismisses the toast from create.tsx
+  useEffect(() => toast.dismiss());
+
   interface addNFT {
     contractAddress: string;
   }
@@ -34,8 +38,7 @@ const Populate: NextPage = (props: pageProps) => {
     tokenID: BigNumber;
   }
   const [inputNFT, setInputNFT] = useState<addNFT>({
-    contractAddress:
-      '',
+    contractAddress: '',
   });
 
   //START HERE
@@ -131,11 +134,11 @@ const Populate: NextPage = (props: pageProps) => {
       <Header />
       <div className='flex flex-wrap max-w-sm mx-auto'>
         <h1 className='text-4xl text-main-gray font-tr mt-32 my-8 w-full text-center'>
-          Add NFTs to {}
+          Add your favorite NFT
         </h1>
-        <div className='w-full mt-16'>
+        <div className='w-full mt-8'>
           <label className='my-1 text-main-gray text-base'>
-            Add your Editions contract
+            Add your Editions contract*
           </label>
           <p className='text-main-gray-dark text-sm'>
             Place the contract address of the Zora Editions
@@ -157,23 +160,25 @@ const Populate: NextPage = (props: pageProps) => {
             }}
           />
         </div>
-        <p className='text-main-gray-dark text-sm mt-12'>
+       
+
+        <button
+          className='text-lg text-main-black mt-12 bg-cta font-tr px-2 py-1 hover:bg-main-gray w-full'
+          onClick={() => write()}
+        >
+          Add NFT
+        </button>
+
+        <p className='text-main-gray-dark text-sm mt-16'>
           Haven&apos;t minted an NFT using Zora&apos;s
           Editions contracts? Mint your first one at{' '}
           <a
-            className='text-cta'
+            className='text-cta hover:text-main-gray-light'
             href='http://create.zora.co/create/edition'
           >
             create.zora.co
           </a>
         </p>
-
-        <button
-          className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray'
-          onClick={() => write()}
-        >
-          Add NFT
-        </button>
       </div>
       <Toaster />
     </div>

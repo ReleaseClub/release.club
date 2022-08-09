@@ -30,7 +30,6 @@ const Create: NextPage = () => {
     undefined
   );
 
-
   const [loading, setLoading] = useState(false);
 
   const { data, isError, isLoading, write } =
@@ -50,29 +49,7 @@ const Create: NextPage = () => {
 
   const { status } = useWaitForTransaction({
     hash: hash,
-  });
-
-  useEffect(() => {
-    if (status === 'success') {
-      router.push({
-        pathname: 'populate',
-        // query: {
-        //   clubAddress: clubAdd,
-        // },
-      });
-    }
-  }, [status]);
-
-  useContractEvent({
-    addressOrName:
-      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
-    contractInterface: ClubFactory,
-    eventName: 'ClubCreated',
-    listener: (event) => {
-      console.log('address:', event[0], 'name:', event[1]);
-      setClubAddress(event[0]);
-      setClubName(event[1]);
-
+    onSuccess() {
       // toast config
       toast.success('Your club was created successfully', {
         icon: null,
@@ -89,6 +66,30 @@ const Create: NextPage = () => {
           'aria-live': 'polite',
         },
       });
+    },
+  });
+
+  // START HERE
+  useEffect(() => {
+    if (status === 'success') {
+      router.push({
+        pathname: 'populate',
+        query: {
+          clubAddress,
+        },
+      });
+    }
+  }, [status]);
+
+  useContractEvent({
+    addressOrName:
+      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
+    contractInterface: ClubFactory,
+    eventName: 'ClubCreated',
+    listener: (event) => {
+      console.log('address:', event[0], 'name:', event[1]);
+      setClubAddress(event[0]);
+      setClubName(event[1]);
     },
   });
 
@@ -109,7 +110,8 @@ const Create: NextPage = () => {
           </p>
           <input
             type='text'
-            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0'
+            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
+            placeholder='i.e. Metabolism'
             value={club.name}
             onChange={(e) => {
               e.preventDefault();
@@ -124,7 +126,7 @@ const Create: NextPage = () => {
         </div>
 
         <button
-          className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray'
+          className='text-lg text-main-black mt-12 bg-cta font-tr px-2 py-1 hover:bg-main-gray w-full'
           onClick={() => write()}
         >
           Create club
