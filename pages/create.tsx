@@ -9,6 +9,8 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import { useState, createContext } from 'react';
+import toast, {Toaster} from 'react-hot-toast';
+
 
 // import { SuccessPopup } from '../components/SuccessPopup';
 
@@ -24,7 +26,7 @@ const Create: NextPage = () => {
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
-        '0x0d07B6b3089E86d9F4DC899526F224788a469Ddd',
+        '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
@@ -38,14 +40,42 @@ const Create: NextPage = () => {
 
   useContractEvent({
     addressOrName:
-      '0x0d07B6b3089E86d9F4DC899526F224788a469Ddd',
+      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
-    listener: (event) =>
-      console.log(
-        'Your club contract was created at',
-        event[0]
-      ),
+    // listener: (event) => (
+    //   setClubName(event[1]), console.log(clubName)
+    // ),
+    listener: (event) => {
+      console.log(event);
+      toast.success('Api data succcessfully received!', {
+        duration: 4000,
+        position: 'top-right',
+  
+        // Custom Icon
+        icon: '👏',
+        // Change colors of success/error/loading icon
+        iconTheme: {
+          primary: '#0a0',
+          secondary: '#fff',
+        },
+        // styling
+      style: {
+        border: '1px solid #FFFDF8',
+        padding: '8px 12px',
+        color: '#FFFDF8',
+        backgroundColor: '#1E1E1E'
+        // minWidth: '300px'
+      },
+        // Aria
+        ariaProps: {
+          role: 'status',
+          'aria-live': 'polite',
+        },
+      });
+    
+    },
+
   });
 
   return (
@@ -92,6 +122,7 @@ const Create: NextPage = () => {
           </Link>
         </div>
       </div>
+      <Toaster/>
     </div>
   );
 };
