@@ -47,10 +47,10 @@ const Create: NextPage = () => {
     //   setClubName(event[1]), console.log(clubName)
     // ),
     listener: (event) => {
-      console.log(event);
-      toast.success('Api data succcessfully received!', {
+      console.log("RH",event);
+      toast.success('Club Created Successfully', {
         duration: 4000,
-        position: 'top-right',
+        position: 'top-left',
   
         // Custom Icon
         icon: '👏',
