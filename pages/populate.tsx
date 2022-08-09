@@ -9,7 +9,18 @@ import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
 import { BigNumber, ethers } from 'ethers';
 
-const Populate: NextPage = (props) => {
+interface Query {
+  clubAddress:string
+}
+interface Router {
+  pathname:string,
+  query:Query
+}
+interface pageProps {
+  router:Router;
+}
+
+const Populate: NextPage = (props:pageProps) => {
   interface addNFT {
     contractAddress: string;
   }
