@@ -6,6 +6,7 @@ import {
   useContractEvent,
   useWaitForTransaction,
 } from 'wagmi';
+import toast, {Toaster} from 'react-hot-toast';
 import { useState } from 'react';
 
 // import { SuccessPopup } from '../components/SuccessPopup';
@@ -44,7 +45,36 @@ const Create: NextPage = () => {
     // listener: (event) => (
     //   setClubName(event[1]), console.log(clubName)
     // ),
-    listener: (event) => console.log(event),
+    listener: (event) => {
+      console.log(event);
+      toast.success('Api data succcessfully received!', {
+        duration: 4000,
+        position: 'top-right',
+  
+        // Custom Icon
+        icon: '👏',
+        // Change colors of success/error/loading icon
+        iconTheme: {
+          primary: '#0a0',
+          secondary: '#fff',
+        },
+        // styling
+      style: {
+        border: '1px solid #FFFDF8',
+        padding: '8px 12px',
+        color: '#FFFDF8',
+        backgroundColor: '#1E1E1E'
+        // minWidth: '300px'
+      },
+        // Aria
+        ariaProps: {
+          role: 'status',
+          'aria-live': 'polite',
+        },
+      });
+    
+    },
+      
   });
 
   return (
@@ -110,6 +140,7 @@ const Create: NextPage = () => {
           Create club
         </button>
       </div>
+      <Toaster/>
     </div>
   );
 };
