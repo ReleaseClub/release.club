@@ -24,7 +24,7 @@ const Create: NextPage = () => {
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
-        '0x5f6C9Cc6AF7D20A5fc1d6701A1B3B3022F3745f4',
+        '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
@@ -38,13 +38,13 @@ const Create: NextPage = () => {
 
   useContractEvent({
     addressOrName:
-      '0x5f6C9Cc6AF7D20A5fc1d6701A1B3B3022F3745f4',
+      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
     // listener: (event) => (
     //   setClubName(event[1]), console.log(clubName)
     // ),
-    listener: (event) => console.log(event[1]),
+    listener: (event) => console.log(event),
   });
 
   return (

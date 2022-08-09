@@ -5,31 +5,54 @@ import { useState } from 'react';
 
 import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
+import { BigNumber, ethers } from 'ethers';
 
 const Populate: NextPage = () => {
   interface addNFT {
     contractAddress: string;
   }
+  interface Release {
+    tokenContract: string;
+    tokenID:BigNumber;
+  }
   const [inputNFT, setInputNFT] = useState<addNFT>({
     contractAddress:
       'i.e. 0x63d46079d920e5dd1f0a38190764a...',
   });
+  let test:string= "0x47227af59cDb02C41501966a8ed92f47D1FD2858";
+  let A:Release[] = [];
+  A.push({
+    tokenContract:test,
+    tokenID:ethers.BigNumber.from("1")
+  })
+  console.log(A)
   const { data, isError, isLoading, write } =
     useContractWrite({
       addressOrName:
-        '0x47227af59cDb02C41501966a8ed92f47D1FD2858',
+        '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399',
       contractInterface: ReleaseClub,
       functionName: 'addRelease',
       // takes two arguments, newReleases as a tuple, and length as a uint256
-      args: [inputNFT.contractAddress, 1],
-      overrides: {
-        gasLimit: 1000000,
-      },
+      args:[A],
+      onSuccess(cancelData,variables,context){
+        console.log("Success!", cancelData);
+      }
       // onError(error, variables, context) {
       //     console.log("error", error)
       // },
       // onSuccess(cancelData, variables, context) {
       //     console.log("Success!", cancelData)
+    });
+
+    useContractEvent({
+      addressOrName:
+        '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399',
+      contractInterface: ReleaseClub,
+      eventName: 'NewRelease',
+      // listener: (event) => (
+      //   setClubName(event[1]), console.log(clubName)
+      // ),
+      listener: (event) => console.log(event),
     });
 
     // useContractEvent({
