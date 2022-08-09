@@ -1,19 +1,22 @@
 import { NextPage } from 'next';
 import { Header } from '../components/Header';
 import { NFTPreview } from '@zoralabs/nft-components';
-import { useRouter, NextRouter } from 'next/router'
+import { useRouter, NextRouter } from 'next/router';
 
 const Create: NextPage = () => {
   const router: NextRouter = useRouter();
   const { clubAddress } = router.query;
-  // XXX TODO use clubAddress to fetch releases and display below.
-  console.log(clubAddress)
+
+  console.log(clubAddress);
   return (
     <div className='max-w-7xl mx-auto'>
       <Header />
-      <h1 className='my-8 ml-3 text-4xl text-main-gray font-aufgang'>Metabolism</h1>
+      <h1 className='my-8 ml-3 text-4xl text-main-gray font-aufgang'>
+        Metabolism
+      </h1>
       <div className='flex flex-wrap justify-between'>
-        <NFTPreview className='my-4'
+        <NFTPreview
+          className='my-4'
           contract='0x345DDE9BAa7d251ae3B321470E4004532b4294f4'
           id='1'
         />
