@@ -21,6 +21,7 @@ const Create: NextPage = () => {
 
   const [club, setClub] = useState<Club>({ name: '' });
 
+  const [clubAdd, setClubAdd] = useState<string|undefined>(undefined);
   const [hash, setHash]= useState<string|undefined>(undefined);
   const {status}=useWaitForTransaction({
     hash:hash
@@ -28,13 +29,13 @@ const Create: NextPage = () => {
   
   useEffect(() => {
     // Update the document title using the browser API
-    console.log("STAT",status)
+    console.log("STAT",status,clubAdd)
     if(status==='success')
   {
     router.push({
       pathname: 'populate',
       query: {
-        clubAddress:event[0]
+        clubAddress:clubAdd
       },
     });
   }
@@ -72,6 +73,7 @@ const Create: NextPage = () => {
     // ),
     listener: (event) => {
       console.log("RH",event);
+      setClubAdd(event[0]);
       toast.success('Club Created Successfully', {
         duration: 4000,
         position: 'top-left',
