@@ -6,12 +6,13 @@ import {
   useContractEvent,
   useWaitForTransaction,
 } from 'wagmi';
-import toast, {Toaster} from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 
 // import { SuccessPopup } from '../components/SuccessPopup';
 
 import ClubFactory from '../abi/ClubFactory.json';
+import { FACTORY_ADDRESS } from '../config/constants';
 
 const Create: NextPage = () => {
   interface Club {
@@ -24,8 +25,7 @@ const Create: NextPage = () => {
 
   const { data, isError, isLoading, write } =
     useContractWrite({
-      addressOrName:
-        '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
+      addressOrName: FACTORY_ADDRESS,
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
@@ -38,8 +38,7 @@ const Create: NextPage = () => {
     });
 
   useContractEvent({
-    addressOrName:
-      '0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc',
+    addressOrName: FACTORY_ADDRESS,
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
     // listener: (event) => (
@@ -50,7 +49,7 @@ const Create: NextPage = () => {
       toast.success('Api data succcessfully received!', {
         duration: 4000,
         position: 'top-right',
-  
+
         // Custom Icon
         icon: '👏',
         // Change colors of success/error/loading icon
@@ -59,22 +58,22 @@ const Create: NextPage = () => {
           secondary: '#fff',
         },
         // styling
-      style: {
-        border: '1px solid #FFFDF8',
-        padding: '8px 12px',
-        color: '#FFFDF8',
-        backgroundColor: '#1E1E1E'
-        // minWidth: '300px'
-      },
+        style: {
+          border: '1px solid #FFFDF8',
+          padding: '8px 12px',
+          color: '#FFFDF8',
+          backgroundColor: '#1E1E1E'
+          // minWidth: '300px'
+        },
         // Aria
         ariaProps: {
           role: 'status',
           'aria-live': 'polite',
         },
       });
-    
+
     },
-      
+
   });
 
   return (
@@ -140,7 +139,7 @@ const Create: NextPage = () => {
           Create club
         </button>
       </div>
-      <Toaster/>
+      <Toaster />
     </div>
   );
 };
