@@ -57,7 +57,8 @@ const Populate: NextPage = (props: pageProps) => {
       args: [newReleases],
       onSuccess(data) {
         setHash(data.hash);
-        console.log(typeof(clubAddress))
+        console.log(typeof(clubAddress
+          ))
       },
       onError(error) {
         console.log(error);
