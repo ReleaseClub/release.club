@@ -8,7 +8,8 @@ import {
   useContractRead,
   useWaitForTransaction,
 } from 'wagmi';
-import { NFTPreview } from '@zoralabs/nft-components';
+import { NFTPreview, MediaConfiguration } from '@zoralabs/nft-components';
+import { Networks } from "@zoralabs/nft-hooks";
 
 interface Query {
   clubAddress: string;
@@ -23,23 +24,16 @@ interface pageProps {
 
 const Club: NextPage = (props: pageProps) => {
   const router: NextRouter = useRouter();
-  console.log('router:', router.asPath);
-
-  // this is some pure hackathon code right here
-  const clubAddressFromRouter = router.asPath
-    .substring(1)
-    .toString();
-  console.log('from router', clubAddressFromRouter);
-  console.log(typeof clubAddressFromRouter);
+  const { clubAddress } = router.query;
 
   const [renderedNFT, setRenderedNFT] = useState();
 
   const { data, isError } = useContractRead({
-    addressOrName: clubAddressFromRouter,
+    addressOrName: clubAddress,
     contractInterface: ReleaseClub,
     functionName: 'releases',
     args: [0],
-    onSettled() {
+    onSuccess(data) {
       setRenderedNFT(data[0]);
     },
     onError(error) {
@@ -54,11 +48,12 @@ const Club: NextPage = (props: pageProps) => {
         <ClubName />
       </h1>
       <div className='flex flex-wrap justify-between'>
-        <NFTPreview
-          contract={renderedNFT}
-          // contract='0xd945f759d422ae30a6166838317b937de08380e3'
-          id='1'
-        />
+        <MediaConfiguration networkId={Networks.RINKEBY}>{/* XXX TODO */}
+          <NFTPreview
+            contract={renderedNFT}
+            id='1'
+          />
+        </MediaConfiguration>
       </div>
     </div>
   );
