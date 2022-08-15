@@ -9,9 +9,6 @@ import {
 import toast, { Toaster } from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 import router from 'next/router';
-
-// import { SuccessPopup } from '../components/SuccessPopup';
-
 import ClubFactory from '../abi/ClubFactory.json';
 import { FACTORY_ADDRESS } from '../config/constants';
 
@@ -22,50 +19,15 @@ const Create: NextPage = () => {
 
   const [club, setClub] = useState<Club>({ name: '' });
 
-  const [clubAdd, setClubAdd] = useState<string | undefined>(undefined);
-  const [hash, setHash] = useState<string | undefined>(undefined);
-  const { status } = useWaitForTransaction({
-    hash: hash
-  })
+  const [clubAddress, setClubAddress] = useState<
+    string | undefined
+  >(undefined);
 
-  useEffect(() => {
-    // Update the document title using the browser API
-    console.log("STAT", status, clubAdd)
-    if (status === 'success') {
-      toast.success('Club Created Successfully', {
-        duration: 4000,
-        position: 'top-left',
+  const [hash, setHash] = useState<string | undefined>(
+    undefined
+  );
 
-        // Custom Icon
-        icon: '👏',
-        // Change colors of success/error/loading icon
-        iconTheme: {
-          primary: '#0a0',
-          secondary: '#fff',
-        },
-        // styling
-        style: {
-          border: '1px solid #FFFDF8',
-          padding: '8px 12px',
-          color: '#FFFDF8',
-          backgroundColor: '#1E1E1E'
-          // minWidth: '300px'
-        },
-        // Aria
-        ariaProps: {
-          role: 'status',
-          'aria-live': 'polite',
-        },
-      });
-      router.push({
-        pathname: 'populate',
-        query: {
-          clubAddress: clubAdd
-        },
-      });
-    }
-  }, [status]);
-  // const [clubName, setClubName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const { data, isError, isLoading, write } =
     useContractWrite({
@@ -73,34 +35,57 @@ const Create: NextPage = () => {
       contractInterface: ClubFactory,
       functionName: 'addClub',
       args: club.name,
-
-      onSuccess(cancelData, variables, context) {
-        console.log("Success!", cancelData);
-        setHash(cancelData.hash);
-
+      onSuccess(data) {
+        console.log('data', data);
+        setHash(data.hash);
       },
       onError(error) {
         console.log('error', error);
-      }
-      // onSuccess(cancelData, variables, context) {
-      //   console.log('Success!', cancelData);
-      // },
+      },
     });
 
   useContractEvent({
     addressOrName: FACTORY_ADDRESS,
     contractInterface: ClubFactory,
     eventName: 'ClubCreated',
-    // listener: (event) => (
-    //   setClubName(event[1]), console.log(clubName)
-    // ),
     listener: (event) => {
-      console.log("RH", event);
-      setClubAdd(event[0]);
-      
+      console.log('address:', event[0], 'name:', event[1]);
+      setClubAddress(event[0]);
     },
-
   });
+
+  const { status } = useWaitForTransaction({
+    hash: hash,
+    onSuccess() {
+      // toast config
+      toast.success('Your club was created successfully', {
+        icon: null,
+        duration: 4000,
+        position: 'top-left',
+        style: {
+          border: '1px solid #FFB5A7',
+          padding: '8px 12px',
+          color: '#8F8E94',
+          backgroundColor: '#171718',
+        },
+        ariaProps: {
+          role: 'status',
+          'aria-live': 'polite',
+        },
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (status === 'success') {
+      router.push({
+        pathname: 'populate',
+        query: {
+          clubAddress,
+        },
+      });
+    }
+  }, [status]);
 
   return (
     <div className='max-w-7xl mx-auto'>
@@ -119,7 +104,8 @@ const Create: NextPage = () => {
           </p>
           <input
             type='text'
-            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0'
+            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
+            placeholder='i.e. Metabolism'
             value={club.name}
             onChange={(e) => {
               e.preventDefault();
@@ -133,33 +119,8 @@ const Create: NextPage = () => {
           />
         </div>
 
-        {/* <div className='w-full font-satoshi-med mt-16'>
-          <label className='my-1 text-main-gray text-base'>
-            Add curators
-          </label>
-          <p className='text-main-gray-dark text-sm'>
-            Add wallet addresses for each collaborator in
-            this club. You will also be able to do this
-            later.
-          </p>
-          <input
-            type='text'
-            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
-            value={club.curators}
-            onChange={(e) => {
-              e.preventDefault();
-              setClub((current) => {
-                return {
-                  ...current,
-                  curators: [e.target.value],
-                };
-              });
-            }}
-          />
-        </div> */}
-
         <button
-          className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray'
+          className='text-lg text-main-black mt-12 bg-cta font-tr px-2 py-1 hover:bg-main-gray w-full'
           onClick={() => write()}
         >
           Create club
