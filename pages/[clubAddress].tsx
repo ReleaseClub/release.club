@@ -25,7 +25,7 @@ interface pageProps {
 
 const Club: NextPage = (props: pageProps) => {
   const router: NextRouter = useRouter();
-  const { clubAddress } = router.query;
+  const clubAddress = router.query.clubAddress as string;
 
   const [releases, setReleases] = useState([]);
 
