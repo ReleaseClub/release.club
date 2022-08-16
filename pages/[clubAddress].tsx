@@ -4,10 +4,11 @@ import { ClubName } from '../components/ClubName';
 import { useRouter, NextRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import ReleaseClub from '../abi/ReleaseClub.json';
-import {
-  useContractRead,
+import { 
+  useContractInfiniteReads,
   useWaitForTransaction,
-} from 'wagmi';
+  paginatedIndexesConfig,
+} from 'wagmi'
 import { NFTPreview, MediaConfiguration } from '@zoralabs/nft-components';
 import { Networks } from "@zoralabs/nft-hooks";
 
@@ -26,20 +27,30 @@ const Club: NextPage = (props: pageProps) => {
   const router: NextRouter = useRouter();
   const { clubAddress } = router.query;
 
-  const [renderedNFT, setRenderedNFT] = useState();
+  const [releases, setReleases] = useState([]);
 
-  const { data, isError } = useContractRead({
-    addressOrName: clubAddress,
-    contractInterface: ReleaseClub,
-    functionName: 'releases',
-    args: [0],
+  const { data, fetchNextPage, hasNextPage } = useContractInfiniteReads({
+    cacheKey: `clubNFTs-${clubAddress}`,
+    ...paginatedIndexesConfig(
+      (index) => ({
+        addressOrName: clubAddress,
+        contractInterface: ReleaseClub,
+        functionName: 'releases',
+        args: [index],
+      }),
+      { start: 0, perPage: 9, direction: 'increment' },
+    ),
     onSuccess(data) {
-      setRenderedNFT(data[0]);
+      // console.log(data);
+      const nfts = data.pages.flat(1);
+      setReleases((prevReleases) => [
+        ...nfts.filter(x => x)
+      ]);
     },
     onError(error) {
       console.log('error', error);
     },
-  });
+  })
 
   return (
     <div className='max-w-7xl mx-auto'>
@@ -49,12 +60,14 @@ const Club: NextPage = (props: pageProps) => {
       </h1>
       <div className='flex flex-wrap justify-between'>
         <MediaConfiguration networkId={Networks.RINKEBY}>{/* XXX TODO */}
-          <NFTPreview
-            contract={renderedNFT}
-            id='1'
-          />
+          {releases.map((release, idx) => (
+            <NFTPreview key={idx} contract={release[0]} id='1'/>
+          ))}
         </MediaConfiguration>
       </div>
+      <button className={hasNextPage ? 'bg-main-gray text-main-black p-5' : 'hidden'} onClick={() => fetchNextPage()}>
+        Load More
+      </button>
     </div>
   );
 };
