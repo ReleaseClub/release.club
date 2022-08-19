@@ -2,15 +2,22 @@
 import axios from "axios";
 export default function handler(req, res) {
   const api = "plPhDK6AiKeqXxTgbmFOVkKEfmlnDaGS"
-console.log(req.body);
+console.log("body",req.body.url);
 
+var data = req.body;
+let url = req.body.url;
+let method =req.body.method;
+delete data.method;
+delete data.url;
+console.log('data :>> ', data);
+console.log('url :>> ', url);
 var config = {
-  method: 'post',
-  url: 'https://thentic.tech/api/nfts/contract',
+  method: method,
+  url: url,
   headers: { 
     'Content-Type': 'application/json'
   },
-  data : JSON.stringify(req.body)
+  data : JSON.stringify(data)
 };
 
 axios(config)

@@ -11,6 +11,7 @@ const Create: NextPage = () => {
   interface Club {
     name: string;
   }
+  let abc;
   const api = "plPhDK6AiKeqXxTgbmFOVkKEfmlnDaGS"
   const { register, handleSubmit } = useForm();
   const [iFrame, setIFrame] = useState("");
@@ -21,6 +22,32 @@ const Create: NextPage = () => {
     if (newWindow) newWindow.opener = null
   }
 
+  const checker =(id)=> {
+    console.log("AAAAA");
+    var dat ={
+      "key": api,
+      "chain_id": "4",
+      "url":"https://thentic.tech/api/contracts",
+      "method":"get"
+    };
+    console.log('dat :>> ', dat);
+    var config = {
+      method: 'post',
+      url: "https://release-club-playground.vercel.app/myapi",
+      data : dat
+    };
+    
+    axios(config).then(function(response){
+      var contract = response.data.contracts.filter(contract=>contract.request_id===id)
+      console.log('contract :>> ', contract);
+      console.log('response :>> ', response);
+      console.log('contract[0].status :>> ', contract[0].status);
+      if(contract[0].status==="success"){
+      clearInterval(abc);
+      console.log("Cleared");
+      }
+    })
+  }
   const onSubmit = data => {
     console.log(data)
     var dat ={
@@ -28,28 +55,22 @@ const Create: NextPage = () => {
       "chain_id": "4",
       "name": data.name,
       "short_name": data.short_name,
-      "webhook_url":"https://release-club-playground.vercel.app/api/myhook",
+      "url":"https://thentic.tech/api/nfts/contract",
+      "method":"post"
     };
     console.log('dat :>> ', dat);
     var config = {
       method: 'post',
-      url: 'https://release-club-playground.vercel.app/api/myapi',
+      url: 'https://release-club-playground.vercel.app/myapi',
       data : dat
     };
     
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
-      
+      abc = setInterval(()=>checker(response.data.request_id),5000);
     })
-
   };
-
-  const [club, setClub] = useState<Club>({ name: '' });
-
-  const [clubAdd, setClubAdd] = useState<string | undefined>(undefined);
-  const [hash, setHash] = useState<string | undefined>(undefined);
-
   return (
     <div className='max-w-7xl mx-auto'>
       <Header />
