@@ -22,31 +22,24 @@ const Create: NextPage = () => {
   }
 
   const onSubmit = data => {
-    data.key=api;
-    data.chain_id="97";
     console.log(data)
-    var dat = JSON.stringify({
+    var dat ={
       "key": api,
       "chain_id": "4",
-      "name": "AA",
-      "short_name": "A",
-    });
+      "name": data.name,
+      "short_name": data.short_name,
+    };
     console.log('dat :>> ', dat);
     var config = {
       method: 'post',
-      url: 'https://thentic.tech/api/nfts/contract',
-      headers: { 
-        'Content-Type': 'application/json'
-      },
+      url: 'http://localhost:3000/api/myapi',
       data : dat
     };
     
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
-      setIFrame(response.data.transaction_pixel);
-      setCheck(true);
-      openInNewTab(response.data.transaction_url)
+      
     })
 
   };
