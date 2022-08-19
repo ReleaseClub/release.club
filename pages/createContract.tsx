@@ -28,6 +28,7 @@ const Create: NextPage = () => {
       "chain_id": "4",
       "name": data.name,
       "short_name": data.short_name,
+      "webhook_url":"http://localhost:3000/api/myhook",
     };
     console.log('dat :>> ', dat);
     var config = {
