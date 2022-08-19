@@ -33,7 +33,7 @@ const Create: NextPage = () => {
     console.log('dat :>> ', dat);
     var config = {
       method: 'post',
-      url: "https://release-club-playground.vercel.app/myapi",
+      url: "https://release-club-playground.vercel.app/api/myapi",
       data : dat
     };
     
@@ -61,7 +61,7 @@ const Create: NextPage = () => {
     console.log('dat :>> ', dat);
     var config = {
       method: 'post',
-      url: 'https://release-club-playground.vercel.app/myapi',
+      url: 'https://release-club-playground.vercel.app/api/myapi',
       data : dat
     };
     
