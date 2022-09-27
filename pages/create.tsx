@@ -1,14 +1,19 @@
 import { NextPage } from 'next';
-import { Header } from '../components/Header';
+
+import { Button } from '../components/Button';
+import { Field } from '../components/Field';
+import { Heading } from '../components/Heading';
+import { Input } from '../components/Input';
+
 import {
   useContractWrite,
-  useContractRead,
   useContractEvent,
   useWaitForTransaction,
 } from 'wagmi';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 import router from 'next/router';
+
 import ClubFactory from '../abi/ClubFactory.json';
 import { FACTORY_ADDRESS } from '../config/constants';
 
@@ -17,6 +22,7 @@ const Create: NextPage = () => {
     name: string;
   }
 
+  // TODO cleanup club hooks
   const [club, setClub] = useState<Club>({ name: '' });
 
   const [clubAddress, setClubAddress] = useState<
@@ -27,9 +33,7 @@ const Create: NextPage = () => {
     undefined
   );
 
-  const [loading, setLoading] = useState(false);
-
-  const { data, isError, isLoading, write } =
+  const { data, isError, write } =
     useContractWrite({
       addressOrName: FACTORY_ADDRESS,
       contractInterface: ClubFactory,
@@ -44,16 +48,18 @@ const Create: NextPage = () => {
       },
     });
 
-  useContractEvent({
-    addressOrName: FACTORY_ADDRESS,
-    contractInterface: ClubFactory,
-    eventName: 'ClubCreated',
-    listener: (event) => {
-      console.log('address:', event[0], 'name:', event[1]);
-      setClubAddress(event[0]);
-    },
-  });
-
+  // // TODO this is not the way, see below
+  // useContractEvent({
+  //   addressOrName: FACTORY_ADDRESS,
+  //   contractInterface: ClubFactory,
+  //   eventName: 'ClubCreated',
+  //   listener: (event) => {
+  //     console.log('address:', event[0], 'name:', event[1]);
+  //     setClubAddress(event[0]);
+  //   },
+  // });
+  //
+  // TODO get club address from transaction receipt logs instead of calling useContractEvent above.
   const { status } = useWaitForTransaction({
     hash: hash,
     onSuccess() {
@@ -85,27 +91,25 @@ const Create: NextPage = () => {
         },
       });
     }
-  }, [status]);
+  }, [status, clubAddress]);
 
-  return (
-    <div className='max-w-7xl mx-auto'>
-      <Header />
-      <div className='flex flex-wrap max-w-sm mx-auto'>
-        <h1 className='text-4xl text-main-gray font-tr mt-32 my-8 w-full text-center'>
-          Create a new club
-        </h1>
-        <div className='w-full mt-8'>
-          <label className='my-2 text-main-gray text-base'>
-            Name*
-          </label>
-          <p className='text-main-gray-dark text-sm mt-1'>
-            The name of your club will be visible to
-            everyone.
-          </p>
-          <input
-            type='text'
-            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
-            placeholder='i.e. Metabolism'
+  const [isSsr, setIsSsr] = useState(true);
+  useEffect(() => {
+    setIsSsr(false);
+  }, []);
+
+  // TODO club name should be set when tx completes or optimistically on button.click not input.change
+  return isSsr ? undefined : (
+    <div className="p-[1rem]">
+      <div className="mx-auto max-w-[31rem] p-[3rem]">
+        <Heading as="h1" className="mr-[-.5rem]">Create a new club</Heading>
+        <div className="h-[4.75rem]"></div>
+        <Field label="Club name*">
+          <div className="h-[.6875rem]"></div>
+          <Input
+            type="text"
+            placeholder="i.e. Metabolism"
+            required
             value={club.name}
             onChange={(e) => {
               e.preventDefault();
@@ -117,16 +121,14 @@ const Create: NextPage = () => {
               });
             }}
           />
-        </div>
+        </Field>
 
-        <button
-          className='text-lg text-main-black mt-12 bg-cta font-tr px-2 py-1 hover:bg-main-gray w-full'
-          onClick={() => write()}
-        >
+        <div className="h-[2.5rem]"></div>
+        <Button className="btn-primary" onClick={() => write()}>
           Create club
-        </button>
+        </Button>
+
       </div>
-      <Toaster />
     </div>
   );
 };

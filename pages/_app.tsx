@@ -16,6 +16,7 @@ import {
 } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { Layout, LayoutProps } from '../components/Layout';
 
 const { chains, provider } = configureChains(
   [chain.rinkeby],
@@ -48,13 +49,16 @@ const rkTheme: Theme = merge(darkTheme({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const layoutProps: LayoutProps = Component.getLayoutProps?.() || {};
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
         chains={chains}
         theme={rkTheme}
       >
-        <Component {...pageProps} />
+        <Layout {...layoutProps}>
+          <Component {...pageProps} />
+        </Layout>
       </RainbowKitProvider>
     </WagmiConfig>
   );
