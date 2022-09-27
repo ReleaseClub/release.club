@@ -5,7 +5,7 @@ import {Box} from './Box';
 
 const _className = 'flex flex-col';
 
-export const Field = ({className, label, children, ...props}) => {
+export const Field = ({className='', label, children, ...props}) => {
   const id = useId();
   const labelId = `${id}-label`;
   const contentProps = {

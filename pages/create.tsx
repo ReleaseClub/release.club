@@ -35,6 +35,7 @@ const Create: NextPage = () => {
 
   const { data, isError, write } =
     useContractWrite({
+      mode: 'recklesslyUnprepared',
       addressOrName: FACTORY_ADDRESS,
       contractInterface: ClubFactory,
       functionName: 'addClub',

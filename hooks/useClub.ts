@@ -31,6 +31,15 @@ const CLUB_VIEW_FUNC_NAMES = CLUB_VIEW_FUNCS.map(({name}) => name);
 //   }
 // };
 
+const formatData = ({functionNames, data}) => {
+  if (data) {
+    return functionNames.reduce((acc: object, name: string, i: number) => {
+      acc[name] = data[i];
+      return acc;
+    });
+  }
+};
+
 export const useClub = ({ contractAddress }) => {
   const clubContract = {
     addressOrName: contractAddress,
@@ -42,13 +51,9 @@ export const useClub = ({ contractAddress }) => {
     return { ...clubContract, functionName: name };
   });
 
-  return useContractReads({
-    contracts,
-    select: (data) => {
-      return functionNames.reduce((acc, name, i) => {
-        acc[name] = data[i];
-        return acc;
-      }, {})
-    }
-  });
+  const {data, ...results} = useContractReads({ contracts });
+  return {
+    data: formatData({functionNames, data}),
+    ...results
+  };
 };

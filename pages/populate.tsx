@@ -30,7 +30,7 @@ interface pageProps {
 }
 
 interface Tag {
-  id: int,
+  id: number,
   text: string
 }
 
