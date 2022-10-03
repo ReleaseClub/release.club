@@ -1,12 +1,22 @@
 # Release Club
 
-## Getting Started - How to Fork
+The is the [release.club](https://release.club) website. 
 
-Ready to grow beyond the UI we provide? Fork it and build the custom experience you need.
+## Contributing
+
+If you're interested in contributing to Release Club, we'd love to hear from you.
+
+Please have a look at the [club-ui](https://github.com/ReleaseClub/club-ui) and [club-protocol](https://github.com/ReleaseClub/club-protocol) repositories. In the future, this website will be built using the packages maintained in these repositories and most contributions should be directed there.
+
+If you're interested in making a contribution to this website, please open an [issue](https://github.com/ReleaseClub/release.club/issues/new) for discussion.
+
+DM's are open [@releasedotclub](https://twitter.com/releasedotclub).
+
+## Developing
 
 > Clone the repo
 ```
-git clone https://github.com/0xTranqui/zora-starter-kit.git
+git clone https://github.com/ReleaseClub/release.club
 ```
 > Install dependencies
 ```
@@ -18,16 +28,4 @@ npm install
 npm run dev
 ```
 
-You now have a version of the the release club website running locally :))
-
-Replace our landing page and branding with your own and build the custom experience you need.
-
-. . . create what is missing . . .
-
-# Contributing
-
-Interested in contributing to release club to make it better for everyone?
-
-We'd love to hear from you...
-
-[@releasedotclub](https://twitter.com/releasedotclub)
+You now have a version of the the release club website running locally :)
