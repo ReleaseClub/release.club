@@ -1,6 +1,6 @@
 # Release Club
 
-The is the [release.club](https://release.club) website. 
+This repository is home to the [release.club](https://release.club) website.
 
 ## Contributing
 
