@@ -4,10 +4,114 @@
 
 @layer base {
   @font-face {
-    font-family: ['Turret-Road', cursive];
-    src: url('https://fonts.googleapis.com/css2?family=Turret+Road:wght@200;300;400;500;700;800&display=swap');
+    font-family: 'Bbbaufgangostgx';
+    src: url('/fonts/BBBAufgangOstGX.woff2') format('woff2'), url('/fonts/BBBAufgangOstGX.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/Satoshi-Regular.woff2') format('woff2'), url('/fonts/Satoshi-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/Satoshi-Medium.woff2') format('woff2'), url('/fonts/Satoshi-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Bbbinvader';
+    src: url('/fonts/BBBInvader-Regular.woff2') format('woff2'), url('/fonts/BBBInvader-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  html {
+    @apply font-satoshi;
+    font-weight: normal;
   }
   body {
-    @apply bg-main-black;
+    @apply relative;
+    @apply bg-n6;
+    @apply text-n0;
+    @apply pb-12;
+    @apply min-h-screen;
+  }
+  body::after {
+    @apply bg-grain-texture;
+    @apply mix-blend-soft-light;
+    @apply opacity-50;
+    @apply absolute;
+    @apply top-0;
+    @apply right-0;
+    @apply bottom-0;
+    @apply left-0;
+    content: '';
+    z-index: -1;
+  }
+
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+}
+
+@layer components {
+  .display-text {
+    @apply font-aufgang tracking-[.04em] antialiased;
+  }
+  /* Use a fancy display font (à la twbs) */
+  .display {
+    @apply display-text leading-[120%];
+  }
+
+  /* Buttons */
+  .btn {
+    @apply display-text whitespace-nowrap text-center text-lg box-border p-[.5rem];
+  }
+
+  .btn-primary {
+    @apply bg-b1 text-n6;
+  }
+
+  .btn-primary:hover {
+    @apply bg-transparent text-b1 ring-inset ring-2 ring-b1;
+  }
+
+  .btn-primary:active {
+    @apply bg-transparent text-n0 ring-inset ring-2 ring-n1;
+  }
+
+  .btn-secondary {
+    @apply bg-n2 text-n6;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  @supports not (scrollbar-width: thin) {
+    .scrollbar-thin::-webkit-scrollbar {
+      width: .25rem;
+    }
+  }
+  .scrollbar-n3 {
+    scrollbar-color: theme(colors.n3);
+  }
+  @supports not (scrollbar-color: #ccc) {
+    .scrollbar-n3::-webkit-scrollbar-thumb {
+      color: theme(colors.n3);
+    }
   }
 }

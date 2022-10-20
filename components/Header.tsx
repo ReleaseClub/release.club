@@ -3,7 +3,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Header = () => {
   return (
-    <div className="flex flex-row-reverse justify-start max-w-8xl mx-auto my-8 items-center">
+    <header className="max-w-screen-2xl mx-auto flex flex-row-reverse justify-start px-4 sm:px-10 py-6 items-center">
       <div>
         <ConnectButton
           accountStatus="address"
@@ -17,6 +17,6 @@ export const Header = () => {
         <img src="../assets/release_club_logo.png" />
       </Link> */}
       
-    </div>
+    </header>
   );
 };

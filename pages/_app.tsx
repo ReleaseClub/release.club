@@ -1,10 +1,12 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import '@rainbow-me/rainbowkit/styles.css';
+import merge from 'lodash.merge';
 import {
   darkTheme,
   getDefaultWallets,
-  RainbowKitProvider
+  RainbowKitProvider,
+  Theme
 } from '@rainbow-me/rainbowkit';
 import {
   chain,
@@ -12,8 +14,9 @@ import {
   createClient,
   WagmiConfig
 } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+// import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import { Layout } from '../components/Layout';
 
 const { chains, provider } = configureChains(
   [chain.rinkeby],
@@ -24,7 +27,7 @@ const { chains, provider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
+  appName: 'Release Club',
   chains
 });
 
@@ -34,18 +37,27 @@ const wagmiClient = createClient({
   provider
 });
 
+const rkTheme: Theme = merge(darkTheme({
+  borderRadius: "none",
+  accentColor: "#FFB5A7",
+  accentColorForeground: "black",
+}), {
+  colors: {
+    connectButtonBackground: "#FFB5A7",
+    connectButtonText: "black",
+  }
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
         chains={chains}
-        theme={darkTheme({
-          borderRadius: "none",
-          accentColor: "#FFB5A7",
-          accentColorForeground: "black",
-        })}
+        theme={rkTheme}
       >
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </RainbowKitProvider>
     </WagmiConfig>
   );

@@ -1,169 +1,141 @@
 import { NextPage } from 'next';
-import { Header } from '../components/Header';
-import { useContractWrite, useContractRead, useContractEvent, useWaitForTransaction } from 'wagmi';
-import { useState, useEffect } from 'react';
-import router from 'next/router';
-import { withRouter } from 'next/router'
-import toast, { Toaster } from 'react-hot-toast'
+import {
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi';
+import { useState, useEffect} from 'react';
+import router, { withRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import ReleaseClub from '../abi/ReleaseClub.json';
 import ClubFactory from '../abi/ClubFactory.json';
 import { BigNumber, ethers } from 'ethers';
 
+import { Button } from '../components/Button';
+import { Field } from '../components/Field';
+import { Heading } from '../components/Heading';
+import { MultiAddressInput } from '../components/MultiAddressInput';
+
 interface Query {
-  clubAddress: string
+  clubAddress: string;
 }
+
 interface Router {
-  pathname: string,
-  query: Query
+  pathname: string;
+  query: Query;
 }
+
 interface pageProps {
   router: Router;
 }
 
+interface Tag {
+  id: number,
+  text: string
+}
+
+interface Release {
+  tokenContract: string;
+  tokenID: BigNumber;
+}
+
 const Populate: NextPage = (props: pageProps) => {
-  interface addNFT {
-    contractAddress: string;
-  }
-  interface Release {
-    tokenContract: string;
-    tokenID: BigNumber;
-  }
-  const [inputNFT, setInputNFT] = useState<addNFT>({
-    contractAddress:
-      'i.e. 0x63d46079d920e5dd1f0a38190764a...',
+  
+  const clubAddress = props.router.query.clubAddress;
+
+  const [contractAddrs, setContractAddrs] = useState<Tag[]>([]);
+
+  const newReleases: Release[] = contractAddrs.map(({text}) => ({
+    tokenContract: text,
+    tokenID: ethers.BigNumber.from('1')
+  }));
+
+  const { config } = usePrepareContractWrite({
+    addressOrName: clubAddress,
+    contractInterface: ReleaseClub,
+    functionName: 'addRelease',
+    args: [newReleases]
   });
-  let test: string = "0x47227af59cDb02C41501966a8ed92f47D1FD2858";
-  let A: Release[] = [];
-  A.push({
-    tokenContract: test,
-    tokenID: ethers.BigNumber.from("1")
-  })
-  A.push({
-    tokenContract: test,
-    tokenID: ethers.BigNumber.from("2")
-  })
-  console.log(A)
 
-  const [hash, setHash] = useState<string | undefined>(undefined);
+  const { data, write, error } = useContractWrite(config);
+ 
   const { status } = useWaitForTransaction({
-    hash: hash
-  })
-
-  useEffect(() => {
-    // Update the document title using the browser API
-    console.log("STAT", status)
-    if (status === 'success') {
-      toast.success('Your NFT has been added to your club', {
+    hash: data?.hash,
+    onSuccess() {
+      // toast config
+      toast.success('Your NFTs have been added.', {
+        icon: null,
         duration: 4000,
         position: 'top-left',
-
-        // Custom Icon
-        icon: '👏',
-        // Change colors of success/error/loading icon
-        iconTheme: {
-          primary: '#0a0',
-          secondary: '#fff',
-        },
-        // styling
         style: {
-          border: '1px solid #FFFDF8',
+          border: '1px solid #FFB5A7',
           padding: '8px 12px',
-          color: '#FFFDF8',
-          backgroundColor: '#1E1E1E'
-          // minWidth: '300px'
+          color: '#8F8E94',
+          backgroundColor: '#171718',
         },
-        // Aria
         ariaProps: {
           role: 'status',
           'aria-live': 'polite',
         },
       });
+    },
+  });
+
+  useEffect(() => {
+    if (status === 'success') {
       router.push({
-        pathname: contractAddress,
-        query: {},
+        pathname: clubAddress,
       });
     }
-  }, [status]);
-  const contractAddress = props.router.query.clubAddress ? props.router.query.clubAddress : '0xB6e4AA83425fD6316791EC3C3a1a00b8754dc399';
-  console.log("Contr", contractAddress)
-  const { data, isError, isLoading, write } =
-    useContractWrite({
-      addressOrName:
-        contractAddress,
-      contractInterface: ReleaseClub,
-      functionName: 'addRelease',
-      // takes two arguments, newReleases as a tuple, and length as a uint256
-      args: [A],
-      onSuccess(cancelData, variables, context) {
-        console.log("Success!", cancelData);
-        setHash(cancelData.hash);
-
-      }
-      // onError(error, variables, context) {
-      //     console.log("error", error)
-      // },
-      // onSuccess(cancelData, variables, context) {
-      //     console.log("Success!", cancelData)
-    });
-
-  // useContractEvent({
-  //   addressOrName: '0x47227af59cDb02C41501966a8ed92f47D1FD2858',
-  //   contractInterface: ClubFactory,
-  //   eventName: 'ClubCreated',
-  //   listener: (event) => console.log(event),
-  // })
+  }, [status, clubAddress]);
 
   return (
-    <div className='max-w-7xl mx-auto'>
-      <Header />
-      <div className='flex flex-wrap max-w-sm mx-auto'>
-        <h1 className='text-4xl text-main-gray font-tr mt-32 my-8 w-full text-center'>
-          Add NFTs to { }
-        </h1>
-        <div className='w-full mt-16'>
-          <label className='my-1 text-main-gray text-base'>
-            Add your Editions contract
-          </label>
-          <p className='text-main-gray-dark text-sm'>
-            Place the contract address of the Zora Editions
-            NFT you wish to add to this club.
+    <div className="p-[1rem]">
+      <div className="border border-n4 mx-auto max-w-[31rem] p-[3rem]">
+        <Heading as="h1" className="mr-[-.5rem]">Add your NFTs</Heading>
+        <div className="h-[4.75rem]"></div>
+        <Field label="Add your Editions contracts">
+          <p className='text-n3 text-sm'>
+            You can add multiple Zora Editions contract addresses below
           </p>
-          <input
-            placeholder='0xa78491157f43125f4a67050be2d90bA01eBCd2d4'
-            type='text'
-            className='w-full bg-main-black border-0 border-b-2 border-cta text-main-gray-dark px-0 mt-6'
-            // value={inputNFT.contractAddress}
-            onChange={(e) => {
-              e.preventDefault();
-              setInputNFT((current) => {
-                return {
-                  ...current,
-                  contractAddress: e.target.value,
-                };
+          <div className="h-[1.5rem]"></div>
+          <MultiAddressInput
+            tags={contractAddrs}
+            suggestions={[]}
+            handleAdd={(tag) => {
+              setContractAddrs((current) => {
+                return [...current, tag];
+              });
+            }}
+            handleRemove={(i) => {
+              setContractAddrs((current) => {
+                const updated = [...current];
+                updated.splice(i, 1);
+                return updated;
               });
             }}
           />
-        </div>
-        <p className='text-main-gray-dark text-sm mt-12'>
-          Haven&apos;t minted an NFT using Zora&apos;s Editions
-          contracts? Mint your first one at{' '}
+        </Field>
+
+        <div className="h-[2rem]"></div>
+        <p className='text-n3 text-sm'>
+          <span>
+            Haven&apos;t minted an NFT using Zora Editions? Mint your first one at{' '}
+          </span>
           <a
-            className='text-cta'
-            href='http://create.zora.co/create/edition' target="_blank" 
-            rel="noopener noreferrer"
+            className='text-b1 hover:text-n0'
+            href='https://create.zora.co/create/edition'
           >
             create.zora.co
           </a>
         </p>
 
-        <button
-          className='text-lg text-main-black mt-20 bg-cta font-tr px-2 py-1 hover:bg-main-gray'
-          onClick={() => write()}
-        >
-          Add NFT
-        </button>
+        <div className="h-[2.5rem]"></div>
+        <Button className="btn-primary" disabled={!write} onClick={() => write?.()}>
+          Update
+        </Button>
+        {error && <div className="text-[#ff0000]">Error: {error.message}</div>}
       </div>
-      <Toaster />
     </div>
   );
 };

@@ -1,1 +1,12 @@
 export const FACTORY_ADDRESS="0xc2D115ed2Eb75aEB8d598e3149a60fA035a020Fc";
+
+export const KEYS = {
+  ENTER: [10, 13],
+  TAB: 9,
+  SPACE: 32,
+  COMMA: 188,
+};
+
+export const ADDRESS_DELIM = [
+  ...KEYS.ENTER, KEYS.TAB, KEYS.SPACE, KEYS.COMMA
+];

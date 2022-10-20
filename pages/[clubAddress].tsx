@@ -1,49 +1,47 @@
 import { NextPage } from 'next';
+import { useRouter, NextRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { useClub } from '../hooks/useClub';
+
 import { Header } from '../components/Header';
-import { NFTPreview } from '@zoralabs/nft-components';
-import { useRouter, NextRouter } from 'next/router'
+// import { ClubName } from '../components/ClubName';
+// import { NFTPreview, MediaConfiguration } from '@zoralabs/nft-components';
+// import { Networks } from "@zoralabs/nft-hooks";
 
-const Create: NextPage = () => {
+interface Query {
+  clubAddress: string;
+}
+interface Router {
+  pathname: string;
+  query: Query;
+}
+interface pageProps {
+  router: Router;
+}
+
+const Club: NextPage = (props: pageProps) => {
   const router: NextRouter = useRouter();
-  const { clubAddress } = router.query;
-  // XXX TODO use clubAddress to fetch releases and display below.
-  console.log(clubAddress)
-  return (
-    <div className='max-w-7xl mx-auto'>
-      <Header />
-      <h1 className='my-8 ml-3 text-4xl text-main-gray font-aufgang'>Metabolism</h1>
-      <div className='flex flex-wrap justify-between'>
-        <NFTPreview className='my-4'
-          contract='0x345DDE9BAa7d251ae3B321470E4004532b4294f4'
-          id='1'
-        />
+  const clubAddress = router.query.clubAddress as string;
 
-        <NFTPreview
-          contract='0x345DDE9BAa7d251ae3B321470E4004532b4294f4'
-          id='2'
-        />
+  const [isSsr, setIsSsr] = useState(true);
+  useEffect(() => {
+    setIsSsr(false);
+  }, []);
 
-        <NFTPreview
-          contract='0x345DDE9BAa7d251ae3B321470E4004532b4294f4'
-          id='3'
-        />
-        <NFTPreview
-          contract='0x345DDE9BAa7d251ae3B321470E4004532b4294f4'
-          id='4'
-        />
+  const { data, error } = useClub({
+    contractAddress: clubAddress,
+  });
 
-        <NFTPreview
-          contract='0x345DDE9BAa7d251ae3B321470E4004532b4294f4'
-          id='5'
-        />
-
-        <NFTPreview
-          contract='0x345DDE9BAa7d251ae3B321470E4004532b4294f4'
-          id='6'
-        />
-      </div>
-    </div>
+  return isSsr ? undefined : (
+    <>
+      {error && (
+        <div className="text-[#aa0000]">{error.message}</div>
+      )}
+      {data && (
+        <code><pre>{JSON.stringify(data, null, 2)}</pre></code>
+      )}
+    </>
   );
 };
 
-export default Create;
+export default Club;
